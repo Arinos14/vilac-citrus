@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Vilac Citrus: produção e comercialização de Limão Tahiti com qualidade, regularidade e compromisso comercial." />
+  <title>Vilac Citrus | Limão Tahiti</title>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <style>
+    :root {
+      --font-sans: "Geist", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "Geist Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --paper: #fbfff7;
+      --lime-white: #f7fff0;
+      --wash: #eefddb;
+      --green: #119a3d;
+      --green-deep: #14551d;
+      --green-dark: #0f2e15;
+      --yellow: #f6b900;
+      --acid: #b9ff36;
+      --ink: #10140d;
+      --muted: #64705d;
+      --line: rgba(20, 85, 29, 0.15);
+      --glass: rgba(255, 255, 255, 0.68);
+      --shadow: 0 24px 80px rgba(57, 108, 20, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+      --glass-card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(246, 252, 244, 0.94));
+      --glass-strong-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 253, 245, 0.96));
+      --glass-soft-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.90), rgba(244, 252, 239, 0.86));
+      --glass-panel-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(247, 252, 244, 0.95));
+      --glass-border: rgba(35, 95, 45, 0.10);
+      --glass-border-green: rgba(35, 95, 45, 0.14);
+      --glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+      --card-alpha: 1;
+      --card-y: 0px;
+      --global-progress: 0;
+      --video-opacity: 1;
+      --video-scale: 1.02;
+      --video-y: 0px;
+      --video-brightness: 1.03;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      min-height: 100%;
+      background: var(--lime-white);
+      scroll-behavior: auto;
+    }
+
+    body {
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: var(--font-sans);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 5%, rgba(185, 255, 54, 0.26), transparent 31rem),
+        radial-gradient(circle at 88% 0%, rgba(17, 154, 61, 0.11), transparent 28rem),
+        linear-gradient(180deg, var(--lime-white), #fff 38%, var(--paper));
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    ::selection { color: var(--ink); background: rgba(185, 255, 54, 0.55); }
+
+    a { color: inherit; }
+
+    .font-geist-mono { font-family: var(--font-mono); }
+
+    .page-header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      z-index: 50;
+      padding: 1.05rem clamp(1rem, 2.8vw, 3rem);
+      transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .page-header.is-scrolled {
+      background: rgba(247, 255, 240, 0.78);
+      border-bottom: 1px solid rgba(20, 85, 29, 0.12);
+      box-shadow: 0 16px 60px rgba(20, 85, 29, 0.08);
+      backdrop-filter: blur(20px);
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      min-height: clamp(4.8rem, 7.2vw, 6.25rem);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.82rem;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      height: 72px;
+      width: auto;
+      display: block;
+      flex: 0 0 auto;
+      object-fit: contain;
+      filter: drop-shadow(0 14px 34px rgba(16, 135, 45, 0.12));
+    }
+
+    .brand-name {
+      display: grid;
+      gap: 0.16rem;
+      line-height: 1;
+    }
+
+    .brand-name strong {
+      font-size: clamp(1.08rem, 1.55vw, 1.48rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+    }
+
+    .brand-name span {
+      font-family: var(--font-mono);
+      color: rgba(16, 20, 13, 0.56);
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(1.15rem, 2.7vw, 3rem);
+    }
+
+    .nav a {
+      position: relative;
+      color: rgba(16, 20, 13, 0.62);
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      line-height: 1;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      transition: color 0.3s ease;
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.55rem;
+      height: 1px;
+      transform: scaleX(0);
+      transform-origin: right;
+      background: var(--green);
+      transition: transform 0.32s ease;
+    }
+
+    .nav a:hover { color: var(--green-dark); }
+    .nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+    .menu-toggle {
+      display: none;
+      width: 2.75rem;
+      height: 2.75rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      cursor: pointer;
+      backdrop-filter: blur(18px);
+    }
+
+    .scroll-stage {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      isolation: isolate;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: clamp(6.3rem, 12vh, 8.6rem) clamp(1rem, 2.8vw, 3rem) clamp(1.2rem, 2.5vw, 2.2rem);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.23;
+      background-image:
+        linear-gradient(rgba(20, 85, 29, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 85, 29, 0.07) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: radial-gradient(circle at 52% 44%, black, transparent 76%);
+      animation: gridDrift 18s linear infinite;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(247, 255, 240, 0.96) 0%, rgba(247, 255, 240, 0.78) 32%, rgba(247, 255, 240, 0.14) 58%, rgba(247, 255, 240, 0.58) 100%),
+        linear-gradient(180deg, rgba(247, 255, 240, 0.78) 0%, transparent 31%, transparent 67%, rgba(247, 255, 240, 0.84) 100%),
+        radial-gradient(circle at 50% 42%, rgba(185, 255, 54, 0.13), transparent 27rem);
+    }
+
+    .video-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: var(--video-opacity);
+      transform: translate3d(0, var(--video-y), 0) scale(var(--video-scale));
+      transform-origin: center;
+      transition: opacity 0.22s ease;
+      will-change: transform, opacity;
+    }
+
+    .video-shell,
+    .video-shell video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-shell {
+      overflow: hidden;
+      background: #eefddb;
+    }
+
+    .video-shell::after {
+      content: "";
+      position: absolute;
+      inset: clamp(0.9rem, 2vw, 1.8rem);
+      z-index: 4;
+      pointer-events: none;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: clamp(1.1rem, 2vw, 1.8rem);
+    }
+
+    video {
+      object-fit: cover;
+      transform: scale(1.02);
+      filter: saturate(1.08) contrast(1.02) brightness(var(--video-brightness));
+    }
+
+    .video-loader {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      color: var(--green-deep);
+      background: rgba(247, 255, 240, 0.72);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: opacity 0.55s ease, visibility 0.55s ease;
+    }
+
+    .video-loader.is-hidden { opacity: 0; visibility: hidden; }
+
+    .hero-content {
+      width: 100%;
+      max-width: 1440px;
+      min-height: calc(100svh - 9.6rem);
+      margin: auto;
+      display: grid;
+      grid-template-columns: minmax(18rem, 0.78fr) minmax(14rem, 0.5fr);
+      align-items: start;
+      gap: clamp(1.2rem, 3vw, 3rem);
+      position: relative;
+      z-index: 5;
+      box-sizing: border-box;
+      padding-top: clamp(1.95rem, 2.4vh, 2.9rem);
+    }
+
+    .copy { max-width: 42rem; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.65rem;
+      border: 1px solid rgba(17, 154, 61, 0.24);
+      border-radius: 999px;
+      background: rgba(238, 253, 219, 0.62);
+      color: var(--green-deep);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      line-height: 1;
+      box-shadow: 0 12px 34px rgba(57, 108, 20, 0.08);
+      backdrop-filter: blur(18px);
+    }
+
+    .ping {
+      position: relative;
+      width: 0.48rem;
+      height: 0.48rem;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(185, 255, 54, 0.24);
+    }
+
+    .ping::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: var(--green);
+      animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    h1 {
+      max-width: 11ch;
+      margin-top: 1rem;
+      color: var(--ink);
+      font-size: clamp(3.35rem, 7.45vw, 7.2rem);
+      line-height: 0.84;
+      letter-spacing: -0.065em;
+      font-weight: 800;
+    }
+
+    .transparent-word {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1.05px rgba(16, 20, 13, 0.76);
+      text-shadow: 0 0 34px rgba(185, 255, 54, 0.34);
+      background: linear-gradient(120deg, rgba(16, 20, 13, 0.03), rgba(185, 255, 54, 0.78), rgba(16, 20, 13, 0.03));
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: letterSweep 7s ease-in-out infinite;
+    }
+
+    .lead {
+      max-width: 34rem;
+      margin-top: 1.05rem;
+      color: rgba(40, 54, 34, 0.72);
+      font-size: clamp(1rem, 1.25vw, 1.17rem);
+      line-height: 1.62;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1.55rem;
+    }
+
+    .button {
+      min-height: 3rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.62rem;
+      border-radius: 999px;
+      padding: 0.9rem 1.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.32s ease, border-color 0.32s ease, background 0.32s ease, color 0.32s ease, box-shadow 0.32s ease;
+    }
+
+    .button-primary {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      color: var(--lime-white);
+      border: 0;
+      background: #050704;
+      box-shadow: 0 16px 42px rgba(17, 154, 61, 0.18);
+    }
+
+    .button-primary::before {
+      content: "";
+      position: absolute;
+      inset: -70% -30%;
+      z-index: -1;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.70), transparent);
+      transform: translateX(-88%) rotate(12deg);
+      transition: transform 0.7s ease;
+    }
+
+    .button-secondary {
+      color: var(--ink);
+      border: 1px solid var(--glass-border-green);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(244, 252, 239, 0.90));
+      box-shadow: 0 16px 44px rgba(57, 108, 20, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .button:hover { transform: translateY(-2px); }
+    .button-primary:hover::before { transform: translateX(88%) rotate(12deg); }
+    .button-secondary:hover { border-color: rgba(17, 154, 61, 0.34); background: rgba(247, 255, 240, 0.84); }
+
+    .support {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.75rem;
+      align-items: start;
+      max-width: 31rem;
+      margin-top: 1.6rem;
+      color: rgba(74, 86, 66, 0.82);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      line-height: 1.55;
+    }
+
+    .support::before {
+      content: "";
+      width: 2.5rem;
+      height: 1px;
+      margin-top: 0.58rem;
+      background: rgba(20, 85, 29, 0.24);
+    }
+
+    .video-label {
+      position: absolute;
+      top: calc(clamp(6.3rem, 12vh, 8.6rem) + clamp(1.95rem, 2.4vh, 2.9rem));
+      right: clamp(1.25rem, 2.8vw, 3rem);
+      z-index: 6;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.44rem 0.7rem;
+      border: 1px solid rgba(17, 154, 61, 0.23);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.66);
+      color: var(--green-deep);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      box-shadow: 0 14px 38px rgba(57, 108, 20, 0.10);
+      backdrop-filter: blur(18px);
+    }
+
+    .progress-ring {
+      width: 4.5rem;
+      height: 4.5rem;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background:
+        conic-gradient(var(--green) calc(var(--progress, 0) * 1turn), rgba(20, 85, 29, 0.11) 0),
+        rgba(255, 255, 255, 0.86);
+      box-shadow: 0 14px 34px rgba(20, 85, 29, 0.10);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .progress-ring::before {
+      content: "";
+      position: absolute;
+      inset: 0.42rem;
+      border-radius: inherit;
+      background: rgba(251, 255, 247, 0.94);
+    }
+
+    .progress-ring span {
+      position: relative;
+      color: var(--green-deep);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
+    }
+
+    .hero-footer {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 6;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.5rem;
+    }
+
+    .scroll-cue {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-left: 0;
+      color: rgba(16, 20, 13, 0.58);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+    }
+
+    .scroll-cue i {
+      width: 2rem;
+      height: 2rem;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--green-deep);
+      background: rgba(255, 255, 255, 0.64);
+      font-style: normal;
+      animation: cue 1.7s ease-in-out infinite;
+    }
+
+    .batch {
+      color: rgba(16, 20, 13, 0.48);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      line-height: 1.6;
+      text-align: right;
+      letter-spacing: 0.03em;
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      background:
+        linear-gradient(180deg, rgba(247, 255, 240, 0.88), rgba(255, 255, 255, 0.86) 18%, rgba(251, 255, 247, 0.90));
+      border-top: 1px solid rgba(20, 85, 29, 0.12);
+      isolation: isolate;
+    }
+
+    .content::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(247, 255, 240, 0.54), rgba(255, 255, 255, 0.34) 42%, rgba(247, 255, 240, 0.56)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(237, 255, 229, 0.28));
+    }
+
+    .section {
+      position: relative;
+      overflow: hidden;
+      scroll-margin-top: 6.25rem;
+      padding: clamp(5rem, 9vw, 8rem) clamp(1rem, 2.8vw, 3rem);
+      border-top: 1px solid rgba(20, 85, 29, 0.11);
+      background:
+        linear-gradient(90deg, rgba(247, 255, 240, 0.82), rgba(247, 255, 240, 0.72) 42%, rgba(255, 255, 255, 0.84));
+    }
+
+    .section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.28;
+      background-image:
+        linear-gradient(rgba(20, 85, 29, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 85, 29, 0.06) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: radial-gradient(circle at center, black, transparent 76%);
+      transform: translate3d(calc(var(--global-progress) * -26px), calc(var(--global-progress) * 18px), 0);
+      will-change: transform;
+    }
+
+    .section-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      opacity: var(--section-alpha, 1);
+      transform: translate3d(0, var(--section-y, 0px), 0) scale(var(--section-scale, 1));
+      transform-origin: center top;
+      will-change: transform, opacity;
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      color: var(--green-deep);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 800;
+    }
+
+    .glass-card,
+    .glass-card-strong,
+    .glass-card-soft,
+    .glass-panel,
+    .stat-card,
+    .info-card,
+    .channel-card,
+    .contact-panel,
+    .story-card,
+    .commercial-callout,
+    .eyebrow,
+    .video-label,
+    .card-icon {
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .glass-card,
+    .stat-card,
+    .info-card,
+    .channel-card {
+      background: var(--glass-card-bg);
+      opacity: var(--card-alpha, 1);
+      transform: translate3d(0, var(--card-y, 0px), 0);
+      will-change: transform, opacity;
+    }
+
+    .glass-card-strong,
+    .contact-panel,
+    .story-card {
+      background: var(--glass-strong-bg);
+      opacity: var(--card-alpha, 1);
+      transform: translate3d(0, var(--card-y, 0px), 0);
+      will-change: transform, opacity;
+    }
+
+    .glass-card-soft,
+    .commercial-callout,
+    .eyebrow,
+    .video-label,
+    .card-icon {
+      background: var(--glass-soft-bg);
+    }
+
+    .glass-panel {
+      background: var(--glass-panel-bg);
+    }
+
+    .section-title {
+      max-width: 760px;
+      color: var(--ink);
+      font-size: clamp(2.35rem, 5.2vw, 5rem);
+      line-height: 0.92;
+      letter-spacing: -0.055em;
+      font-weight: 800;
+    }
+
+    .section-lead {
+      max-width: 760px;
+      margin-top: 1.25rem;
+      color: rgba(74, 86, 66, 0.86);
+      font-size: clamp(1rem, 1.35vw, 1.2rem);
+      line-height: 1.65;
+      font-weight: 520;
+    }
+
+    .history-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card,
+    .info-card,
+    .channel-card,
+    .contact-panel {
+      border-radius: 1.25rem;
+    }
+
+    .stat-card { padding: 1.2rem; }
+
+    .stat-card strong {
+      display: block;
+      color: var(--green-deep);
+      font-size: clamp(1.85rem, 3vw, 3rem);
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      margin-bottom: 0.8rem;
+    }
+
+    .stat-card span {
+      display: block;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      line-height: 1.5;
+    }
+
+    .story-card {
+      padding: clamp(1.25rem, 3vw, 2.4rem);
+      border-radius: 1.35rem;
+      border-left-color: rgba(255, 255, 255, 0.48);
+    }
+
+    .story-card p {
+      color: rgba(49, 65, 42, 0.86);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .story-card p + p { margin-top: 1.1rem; }
+
+    .signature {
+      margin-top: 1.6rem;
+      color: var(--green-deep);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .info-card {
+      min-height: 13rem;
+      padding: 1.35rem;
+      transition: transform 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease, background 0.32s ease;
+    }
+
+    .info-card:hover,
+    .channel-card:hover {
+      transform: translate3d(0, calc(var(--card-y, 0px) - 3px), 0);
+      border-color: rgba(35, 95, 45, 0.16);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(246, 252, 244, 0.96));
+      box-shadow: 0 18px 48px rgba(57, 108, 20, 0.09);
+    }
+
+    .card-icon {
+      width: 2.35rem;
+      height: 2.35rem;
+      display: grid;
+      place-items: center;
+      margin-bottom: 1.4rem;
+      border-radius: 999px;
+      color: var(--green-deep);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 900;
+    }
+
+    .info-card h3,
+    .channel-card h3 {
+      color: var(--ink);
+      font-size: 1.1rem;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.65rem;
+    }
+
+    .info-card p,
+    .channel-card p {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .story-card p,
+    .section-lead,
+    .commercial-callout p,
+    .contact-row strong {
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.34);
+    }
+
+    .representations {
+      background:
+        radial-gradient(circle at 12% 22%, rgba(246, 185, 0, 0.10), transparent 22rem),
+        radial-gradient(circle at 85% 30%, rgba(17, 154, 61, 0.10), transparent 28rem),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(247, 255, 240, 0.76));
+    }
+
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .channel-card {
+      padding: 1.2rem;
+      min-height: 12rem;
+      transition: transform 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
+    }
+
+    .commercial-callout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-top: 1.2rem;
+      padding: 1rem 1.2rem;
+      border-radius: 999px;
+    }
+
+    .commercial-callout p {
+      color: rgba(49, 65, 42, 0.86);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .contact {
+      background:
+        linear-gradient(180deg, rgba(247, 255, 240, 0.82), rgba(255, 255, 255, 0.88)),
+        radial-gradient(circle at 80% 20%, rgba(185, 255, 54, 0.18), transparent 28rem);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: clamp(1.5rem, 4vw, 4rem);
+      align-items: center;
+    }
+
+    .contact-actions { margin-top: 2rem; }
+
+    .contact-panel {
+      padding: clamp(1.2rem, 2.8vw, 2rem);
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(20, 85, 29, 0.12);
+    }
+
+    .contact-row:last-child { border-bottom: 0; }
+
+    .contact-row span {
+      color: var(--green-deep);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 800;
+    }
+
+    .contact-row strong {
+      color: var(--ink);
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .site-footer {
+      position: relative;
+      z-index: 11;
+      padding: clamp(1.25rem, 2.6vw, 2rem) clamp(1rem, 2.8vw, 3rem);
+      border-top: 1px solid rgba(20, 85, 29, 0.12);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(247, 255, 240, 0.92)),
+        rgba(255, 255, 255, 0.86);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.15rem;
+      border: 1px solid rgba(35, 95, 45, 0.10);
+      border-radius: 1.15rem;
+      color: rgba(49, 65, 42, 0.82);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.5;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(247, 252, 244, 0.88));
+      box-shadow: 0 14px 34px rgba(12, 36, 16, 0.06);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+    }
+
+    .footer-copy {
+      display: flex;
+      justify-content: space-between;
+      gap: clamp(1rem, 5vw, 6rem);
+      width: 100%;
+    }
+
+    .no-motion-note { display: none; }
+
+    @keyframes letterSweep {
+      0%, 100% { background-position: 0% center; filter: drop-shadow(0 0 0 rgba(185, 255, 54, 0)); }
+      50% { background-position: 100% center; filter: drop-shadow(0 0 18px rgba(185, 255, 54, 0.38)); }
+    }
+
+    @keyframes gridDrift {
+      from { background-position: 0 0, 0 0; }
+      to { background-position: 54px 54px, 54px 54px; }
+    }
+
+    @keyframes ping {
+      75%, 100% { transform: scale(2.6); opacity: 0; }
+    }
+
+    @keyframes cue {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    @media (max-width: 1100px) {
+      .hero-content {
+        grid-template-columns: minmax(0, 0.95fr) minmax(5rem, 0.15fr);
+      }
+
+      .history-layout,
+      .contact-layout { grid-template-columns: 1fr; }
+
+      .products-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .channels-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .page-header { padding: 0.78rem 1rem; }
+
+      .header-inner { min-height: 4.35rem; }
+      .brand-mark {
+        height: 52px;
+        width: auto;
+      }
+      .brand-name strong { font-size: 1rem; }
+      .brand-name span { display: none; }
+
+      .menu-toggle { display: grid; place-items: center; }
+
+      .nav {
+        position: fixed;
+        top: 4.9rem;
+        left: 1rem;
+        right: 1rem;
+        display: grid;
+        gap: 0;
+        padding: 0.6rem;
+        border: 1px solid var(--line);
+        border-radius: 1.25rem;
+        background: rgba(247, 255, 240, 0.92);
+        box-shadow: 0 24px 80px rgba(57, 108, 20, 0.14);
+        backdrop-filter: blur(22px);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.28s ease;
+      }
+
+      .nav.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .nav a {
+        padding: 1rem;
+        border-radius: 0.9rem;
+      }
+
+      .nav a:hover { background: rgba(238, 253, 219, 0.8); }
+      .nav a::after { display: none; }
+
+      .scroll-stage {
+        min-height: 100vh;
+        min-height: 100svh;
+      }
+
+      .hero {
+        padding: 5.4rem 1rem 1rem;
+      }
+
+      .content {
+        background: linear-gradient(180deg, rgba(247, 255, 240, 0.91), rgba(255, 255, 255, 0.9) 18%, rgba(251, 255, 247, 0.94));
+      }
+
+      .section {
+        background: linear-gradient(180deg, rgba(247, 255, 240, 0.92), rgba(255, 255, 255, 0.9));
+      }
+
+      .glass-card,
+      .glass-card-strong,
+      .glass-panel,
+      .stat-card,
+      .info-card,
+      .channel-card,
+      .contact-panel,
+      .story-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(247, 252, 244, 0.97));
+        box-shadow: 0 12px 30px rgba(12, 36, 16, 0.06);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+      }
+
+      .glass-card-soft,
+      .commercial-callout,
+      .eyebrow,
+      .video-label,
+      .card-icon,
+      .button-secondary {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(246, 252, 244, 0.90));
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+      }
+
+      .hero-content {
+        min-height: calc(100svh - 7.8rem);
+        grid-template-columns: 1fr;
+        align-content: center;
+        gap: 1.1rem;
+        padding-top: 0;
+      }
+
+      h1 {
+        max-width: 10.5ch;
+        font-size: clamp(3rem, 16vw, 5.1rem);
+      }
+
+      .lead { font-size: 0.95rem; }
+
+      .actions { display: grid; grid-template-columns: 1fr; }
+      .button { width: 100%; }
+
+      .support { display: none; }
+
+      .video-label { display: none; }
+      .scroll-cue { margin-left: 0; }
+      .batch { display: none; }
+
+      .section { padding: 4.3rem 1rem; }
+      .stats-grid,
+      .products-grid,
+      .channels-grid { grid-template-columns: 1fr; }
+
+      .commercial-callout {
+        align-items: stretch;
+        flex-direction: column;
+        border-radius: 1.25rem;
+      }
+
+      .footer-inner {
+        flex-direction: row;
+        align-items: center;
+        padding: 0.9rem;
+      }
+
+      .footer-copy {
+        flex-direction: column;
+        gap: 0.45rem;
+      }
+
+      .progress-ring {
+        width: 3.65rem;
+        height: 3.65rem;
+      }
+    }
+
+    @supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
+      .glass-card,
+      .glass-card-strong,
+      .glass-card-soft,
+      .glass-panel,
+      .stat-card,
+      .info-card,
+      .channel-card,
+      .contact-panel,
+      .story-card,
+      .commercial-callout,
+      .eyebrow,
+      .video-label,
+      .card-icon,
+      .button-secondary {
+        background: rgba(255, 255, 255, 0.96);
+      }
+
+      .info-card,
+      .channel-card,
+      .stat-card {
+        background: rgba(250, 255, 244, 0.96);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+
+      .scroll-stage { min-height: 100vh; }
+      .video-stage {
+        position: absolute;
+        opacity: 0.86;
+        transform: none;
+      }
+      .no-motion-note { display: inline; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header" id="pageHeader">
+    <div class="header-inner">
+      <a class="brand" href="#hero" aria-label="Vilac Citrus">
+        <img class="brand-mark" src="assets/logo-vilac-citrus.png" alt="Vilac Citrus" width="1097" height="798" />
+        <span class="brand-name"><strong>Vilac Citrus</strong><span>Grupo Vilac Foods</span></span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="nav" id="mainNav" aria-label="Navegação principal">
+        <a href="#empresa">Empresa</a>
+        <a href="#produtos">Produtos</a>
+        <a href="#representacoes">Representações</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="scroll-stage" id="hero" aria-label="Hero de venda de Limão Tahiti">
+    <div class="hero">
+      <div class="video-stage" data-parallax="video">
+        <div class="video-shell">
+          <video id="heroVideo" src="video2.mp4" muted playsinline preload="auto" aria-label="Vídeo de Limão Tahiti selecionado"></video>
+          <div class="video-loader" id="videoLoader">Carregando safra</div>
+        </div>
+      </div>
+
+      <div class="video-label">
+        <span class="ping" aria-hidden="true"></span>
+        Produção própria · Limão Tahiti
+      </div>
+
+      <div class="hero-content">
+        <div class="copy" data-parallax="copy">
+          <div class="eyebrow"><span class="ping" aria-hidden="true"></span>Grupo Vilac Foods · desde 2020</div>
+          <h1>Do campo ao cliente, <span class="transparent-word">qualidade</span> que nasce de uma história de confiança</h1>
+          <p class="lead">Produção própria, qualidade padronizada e fornecimento regular para mercados, distribuidores, restaurantes e compradores profissionais.</p>
+          <div class="actions" aria-label="Ações comerciais">
+            <a class="button button-primary" href="#contato">Solicitar cotação <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="#empresa">Conhecer a Vilac Citrus <span aria-hidden="true">＋</span></a>
+          </div>
+          <p class="support">Uma operação criada para unir tradição no ramo alimentício, boas práticas agrícolas, sustentabilidade e confiança no fornecimento.</p>
+        </div>
+
+      </div>
+
+      <footer class="hero-footer">
+        <div class="scroll-cue"><i aria-hidden="true">↓</i>Role para explorar a Vilac Citrus <span class="no-motion-note"> · movimento reduzido ativo</span></div>
+        <div class="batch">produção · seleção · fornecimento</div>
+      </footer>
+    </div>
+  </section>
+
+  <main class="content">
+    <section class="section" id="empresa">
+      <div class="section-inner history-layout reveal">
+        <div>
+          <span class="section-kicker"><span class="ping" aria-hidden="true"></span>Empresa</span>
+          <h2 class="section-title">Nossa história nasce da experiência no alimento.</h2>
+          <p class="section-lead">A Vilac Citrus faz parte do Grupo Vilac Foods, grupo com mais de 25 anos de atuação no ramo alimentício e uma trajetória construída com qualidade, responsabilidade e compromisso com clientes.</p>
+          <div class="stats-grid">
+            <div class="stat-card"><strong>+25</strong><span>anos de experiência do Grupo Vilac Foods no setor alimentício.</span></div>
+            <div class="stat-card"><strong>2020</strong><span>ano de criação da Vilac Citrus, com foco em produção de cítrus.</span></div>
+            <div class="stat-card"><strong>Origem</strong><span>controle e cuidado em cada etapa, do campo ao cliente.</span></div>
+            <div class="stat-card"><strong>Regular</strong><span>fornecimento pensado para demanda comercial profissional.</span></div>
+          </div>
+        </div>
+
+        <div class="story-card">
+          <p>Criada em 2020, a Vilac Citrus nasceu para unir a experiência do grupo a uma nova visão para a produção de cítrus: mais sustentável, eficiente e de alto rendimento, respeitando o meio ambiente e valorizando boas práticas agrícolas.</p>
+          <p>Desde o início, nosso propósito é produzir e comercializar cítrus com qualidade, segurança e regularidade, oferecendo aos clientes a confiança de comprar de uma empresa estruturada, comprometida com a origem do produto e preparada para atender diferentes demandas do mercado.</p>
+          <p>Mais do que vender frutas, buscamos entregar um produto que representa cuidado em cada etapa. Cada limão produzido pela Vilac Citrus carrega a força da nossa experiência, o compromisso com a sustentabilidade e a excelência que fazem parte da história do Grupo Vilac Foods.</p>
+          <div class="signature">Vilac Citrus: tradição, sustentabilidade e qualidade na produção de cítrus.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="produtos">
+      <div class="section-inner reveal">
+        <span class="section-kicker"><span class="ping" aria-hidden="true"></span>Produtos</span>
+        <h2 class="section-title">Limão Tahiti selecionado para operação comercial.</h2>
+        <p class="section-lead">Produto fresco, padronizado e com aparência comercial para supermercados, atacados, distribuidores, restaurantes, hotéis e compradores profissionais.</p>
+        <div class="products-grid">
+          <article class="info-card"><div class="card-icon">01</div><h3>Padrão comercial</h3><p>Calibre, casca, cor e firmeza avaliados para melhor apresentação e giro.</p></article>
+          <article class="info-card"><div class="card-icon">02</div><h3>Seleção por qualidade</h3><p>Triagem visual e cuidado no lote para reduzir variação e aumentar confiança.</p></article>
+          <article class="info-card"><div class="card-icon">03</div><h3>Frescor e rendimento</h3><p>Limão natural, suculento e adequado para uso comercial e culinário.</p></article>
+          <article class="info-card"><div class="card-icon">04</div><h3>Fornecimento regular</h3><p>Atendimento pensado para compras recorrentes e planejamento de volume.</p></article>
+          <article class="info-card"><div class="card-icon">05</div><h3>Produto para atacado</h3><p>Condições comerciais para mercados, Ceasa, distribuidores e food service.</p></article>
+          <article class="info-card"><div class="card-icon">06</div><h3>Do campo ao cliente</h3><p>Cuidado no processo para preservar qualidade, origem e confiabilidade.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section representations" id="representacoes">
+      <div class="section-inner reveal">
+        <span class="section-kicker"><span class="ping" aria-hidden="true"></span>Representações</span>
+        <h2 class="section-title">Atendimento comercial para diferentes canais.</h2>
+        <p class="section-lead">Estrutura para atender compradores que buscam regularidade, qualidade e confiança no fornecimento de Limão Tahiti.</p>
+        <div class="channels-grid">
+          <article class="channel-card"><div class="card-icon">M</div><h3>Mercados e supermercados</h3><p>Lotes com padrão visual para exposição, giro e reposição de gôndola.</p></article>
+          <article class="channel-card"><div class="card-icon">A</div><h3>Distribuidores e atacado</h3><p>Abastecimento com volume, regularidade e negociação profissional.</p></article>
+          <article class="channel-card"><div class="card-icon">F</div><h3>Food service</h3><p>Restaurantes, hotéis e cozinhas profissionais que precisam de rendimento.</p></article>
+          <article class="channel-card"><div class="card-icon">C</div><h3>Compradores profissionais</h3><p>Atendimento objetivo para quem compra com critério e demanda previsibilidade.</p></article>
+        </div>
+        <div class="commercial-callout">
+          <p>Fale com nossa equipe comercial e encontre a melhor condição para o seu volume de compra.</p>
+          <a class="button button-primary" href="#contato">Abrir contato comercial <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact" id="contato">
+      <div class="section-inner contact-layout reveal">
+        <div>
+          <span class="section-kicker"><span class="ping" aria-hidden="true"></span>Contato</span>
+          <h2 class="section-title">Solicite uma cotação.</h2>
+          <p class="section-lead">Entre em contato para consultar disponibilidade, preço, volume mínimo e condições de entrega para sua operação.</p>
+          <div class="actions contact-actions">
+            <a class="button button-primary" href="https://wa.me/558491977416">Chamar no WhatsApp <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="mailto:j.arinos@vilaccitrus.com.br">Enviar e-mail <span aria-hidden="true">＋</span></a>
+          </div>
+        </div>
+
+        <aside class="contact-panel" aria-label="Informações comerciais">
+          <div class="contact-row"><span>WhatsApp</span><strong>+55 (84) 9197-7416</strong></div>
+          <div class="contact-row"><span>E-mail</span><strong>j.arinos@vilaccitrus.com.br</strong></div>
+          <div class="contact-row"><span>Região de atendimento</span><strong>Europa, América do Norte, América do Sul</strong></div>
+          <div class="contact-row"><span>Horário comercial</span><strong>Segunda a sexta · 8h às 18h</strong></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        <span>© 2026 Vilac Citrus · Grupo Vilac Foods<br />CNPJ: 06.133.837/0001-95</span>
+        <span>Produção de cítrus com qualidade, sustentabilidade e regularidade.</span>
+      </div>
+      <div class="progress-ring" id="progressRing" aria-label="Progresso do vídeo">
+        <span id="progressText">00%</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const header = document.getElementById("pageHeader");
+      const menuToggle = document.getElementById("menuToggle");
+      const nav = document.getElementById("mainNav");
+      const video = document.getElementById("heroVideo");
+      const loader = document.getElementById("videoLoader");
+      const progressRing = document.getElementById("progressRing");
+      const progressText = document.getElementById("progressText");
+      const copy = document.querySelector('[data-parallax="copy"]');
+      const motionBlocks = [
+        { type: "hero", element: document.querySelector(".hero"), target: copy },
+        ...Array.from(document.querySelectorAll(".section")).map((section) => ({
+          type: "section",
+          element: section,
+          target: section.querySelector(".section-inner")
+        }))
+      ].filter((item) => item.element && item.target);
+      const glassItems = Array.from(document.querySelectorAll(".stat-card, .info-card, .channel-card, .contact-panel, .story-card, .commercial-callout"));
+      const seekProxy = { time: 0 };
+      const VIDEO_START_PROGRESS = 0.34;
+      const rootStyle = document.documentElement.style;
+      let targetTime = 0;
+      let lastAppliedTime = -1;
+      let hasMetadata = false;
+      let motionStarted = false;
+      let enhancementsStarted = false;
+      let currentProgress = 0;
+      let targetProgress = 0;
+      let rafId = 0;
+
+      const setHeaderState = () => {
+        header.classList.toggle("is-scrolled", window.scrollY > 12);
+      };
+
+      const scrollToCurrentHash = (delay = 90) => {
+        if (!window.location.hash) return;
+        const target = document.querySelector(window.location.hash);
+        if (!target) return;
+        window.setTimeout(() => target.scrollIntoView({ behavior: "auto", block: "start" }), delay);
+      };
+
+      setHeaderState();
+      window.addEventListener("scroll", setHeaderState, { passive: true });
+
+      menuToggle.addEventListener("click", () => {
+        const isOpen = nav.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.textContent = isOpen ? "×" : "☰";
+      });
+
+      nav.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", (event) => {
+          const target = document.querySelector(link.getAttribute("href"));
+          if (target) {
+            event.preventDefault();
+            target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+            history.pushState(null, "", link.getAttribute("href"));
+          }
+          nav.classList.remove("is-open");
+          menuToggle.setAttribute("aria-expanded", "false");
+          menuToggle.textContent = "☰";
+        });
+      });
+
+      window.addEventListener("load", () => {
+        scrollToCurrentHash(120);
+        syncGlobalMotion();
+      });
+
+      const hideLoader = () => loader.classList.add("is-hidden");
+
+      const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
+
+      const getMaxScroll = () => {
+        const documentHeight = Math.max(
+          document.documentElement.scrollHeight,
+          document.body.scrollHeight,
+          document.documentElement.offsetHeight,
+          document.body.offsetHeight
+        );
+        return Math.max(documentHeight - window.innerHeight, 1);
+      };
+
+      const getScrollProgress = () => {
+        const maxScroll = getMaxScroll();
+        const rawProgress = window.scrollY / maxScroll;
+        const isAtEnd = window.scrollY >= maxScroll - 2;
+        return isAtEnd ? 1 : clamp(rawProgress, 0, 0.995);
+      };
+
+      const updateProgress = (progress) => {
+        const clamped = clamp(progress);
+        progressRing.style.setProperty("--progress", clamped.toFixed(4));
+        progressText.textContent = `${String(Math.round(clamped * 100)).padStart(2, "0")}%`;
+      };
+
+      const applyVisualState = (progress) => {
+        const clamped = clamp(progress);
+        const isMobile = window.matchMedia("(max-width: 760px)").matches;
+        const heroProgress = clamp(window.scrollY / Math.max(window.innerHeight, 1));
+        const opacity = isMobile ? 0.50 - clamped * 0.08 : 0.74 - clamped * 0.12;
+        const heroBoost = (1 - heroProgress) * (isMobile ? 0.18 : 0.22);
+        const scale = 1.01 + clamped * (isMobile ? 0.012 : 0.022);
+        const y = clamped * (isMobile ? -5 : -12);
+        const brightness = 1.01 + clamped * 0.02;
+
+        rootStyle.setProperty("--global-progress", clamped.toFixed(4));
+        rootStyle.setProperty("--video-opacity", clamp(opacity + heroBoost, isMobile ? 0.40 : 0.56, 0.96).toFixed(4));
+        rootStyle.setProperty("--video-scale", scale.toFixed(4));
+        rootStyle.setProperty("--video-y", `${y.toFixed(2)}px`);
+        rootStyle.setProperty("--video-brightness", brightness.toFixed(3));
+        updateProgress(clamped);
+        requestScrub(clamped);
+      };
+
+      const applyVideoTime = () => {
+        if (!hasMetadata || prefersReducedMotion || video.readyState < 1) return;
+        const desiredTime = Math.max(0, Math.min(video.duration || 0, seekProxy.time));
+        if (Math.abs(desiredTime - lastAppliedTime) < 1 / 45) return;
+        try {
+          const distance = Math.abs(desiredTime - video.currentTime);
+          if (distance > 0.42 && typeof video.fastSeek === "function") video.fastSeek(desiredTime);
+          else video.currentTime = desiredTime;
+          lastAppliedTime = desiredTime;
+        } catch (error) {
+          lastAppliedTime = video.currentTime || 0;
+        }
+      };
+
+      const scrubTick = (easing = 0.18) => {
+        if (!hasMetadata || prefersReducedMotion) return;
+        const delta = targetTime - seekProxy.time;
+        seekProxy.time += delta * easing;
+        if (Math.abs(delta) < 0.003) seekProxy.time = targetTime;
+        applyVideoTime();
+      };
+
+      const requestScrub = (progress) => {
+        if (!hasMetadata || !Number.isFinite(video.duration) || video.duration <= 0) return;
+        const safeDuration = Math.max(video.duration - 0.04, 0);
+        const scrollProgress = Math.max(0, Math.min(1, progress));
+        const mappedProgress = VIDEO_START_PROGRESS + (1 - VIDEO_START_PROGRESS) * scrollProgress;
+        targetTime = safeDuration * mappedProgress;
+      };
+
+      const getBlockPresence = (element) => {
+        const rect = element.getBoundingClientRect();
+        const viewport = window.innerHeight || document.documentElement.clientHeight;
+        const enterStart = viewport * 0.96;
+        const enterEnd = viewport * 0.34;
+        const enter = clamp((enterStart - rect.top) / Math.max(enterStart - enterEnd, 1));
+        const exit = clamp((rect.bottom - viewport * 0.08) / Math.max(viewport * 0.52, 1));
+        return clamp(Math.min(enter, exit));
+      };
+
+      const applyBlockMotion = (progress) => {
+        const isMobile = window.matchMedia("(max-width: 760px)").matches;
+
+        motionBlocks.forEach(({ type, element, target }) => {
+          if (type === "hero") {
+            const heroDepth = clamp(window.scrollY / Math.max(element.offsetHeight, window.innerHeight, 1));
+            const y = heroDepth * (isMobile ? -12 : -22);
+            const alpha = 1 - heroDepth * (isMobile ? 0.10 : 0.16);
+            target.style.opacity = clamp(alpha, 0.82, 1).toFixed(4);
+            target.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
+            return;
+          }
+
+          const presence = getBlockPresence(element);
+          const y = (1 - presence) * (isMobile ? 8 : 12);
+          const scale = 1;
+          const alpha = 0.86 + presence * 0.14;
+
+          target.style.setProperty("--section-alpha", alpha.toFixed(4));
+          target.style.setProperty("--section-y", `${y.toFixed(2)}px`);
+          target.style.setProperty("--section-scale", scale.toFixed(4));
+        });
+
+        glassItems.forEach((item, index) => {
+          const presence = getBlockPresence(item);
+          const stagger = (index % 3) * 0.018;
+          const easedPresence = clamp((presence - stagger) / 0.92);
+          const y = (1 - easedPresence) * (isMobile ? 6 : 10);
+          const alpha = 0.90 + easedPresence * 0.10;
+
+          item.style.setProperty("--card-alpha", alpha.toFixed(4));
+          item.style.setProperty("--card-y", `${y.toFixed(2)}px`);
+        });
+      };
+
+      const updateGlobalAnimation = (progress) => {
+        applyVisualState(progress);
+        applyBlockMotion(progress);
+      };
+
+      const motionTick = () => {
+        rafId = 0;
+        const delta = targetProgress - currentProgress;
+        currentProgress += delta * 0.14;
+        if (Math.abs(delta) < 0.0008) currentProgress = targetProgress;
+
+        updateGlobalAnimation(currentProgress);
+        scrubTick(0.22);
+
+        if (Math.abs(targetProgress - currentProgress) > 0.0008 || Math.abs(targetTime - seekProxy.time) > 0.004) {
+          rafId = window.requestAnimationFrame(motionTick);
+        }
+      };
+
+      const requestMotionFrame = () => {
+        if (!rafId) rafId = window.requestAnimationFrame(motionTick);
+      };
+
+      const syncGlobalMotion = () => {
+        targetProgress = getScrollProgress();
+        requestMotionFrame();
+      };
+
+      const startGlobalMotion = () => {
+        if (motionStarted) return;
+        motionStarted = true;
+
+        if (prefersReducedMotion) {
+          currentProgress = 0;
+          targetProgress = 0;
+          updateGlobalAnimation(0);
+          motionBlocks.forEach(({ target }) => {
+            target.style.opacity = "1";
+            target.style.transform = "none";
+            target.style.setProperty("--section-alpha", "1");
+            target.style.setProperty("--section-y", "0px");
+            target.style.setProperty("--section-scale", "1");
+          });
+          glassItems.forEach((item) => {
+            item.style.setProperty("--card-alpha", "1");
+            item.style.setProperty("--card-y", "0px");
+          });
+          updateProgress(0);
+          scrollToCurrentHash(120);
+          return;
+        }
+
+        currentProgress = getScrollProgress();
+        targetProgress = currentProgress;
+        updateGlobalAnimation(currentProgress);
+
+        window.addEventListener("scroll", syncGlobalMotion, { passive: true });
+        window.addEventListener("resize", syncGlobalMotion);
+        syncGlobalMotion();
+        scrollToCurrentHash(120);
+      };
+
+      const initMotion = () => {
+        startGlobalMotion();
+
+        if (enhancementsStarted) return;
+
+        if (!window.gsap) return;
+
+        enhancementsStarted = true;
+
+        if (window.ScrollTrigger) {
+          gsap.registerPlugin(ScrollTrigger);
+          ScrollTrigger.config({ ignoreMobileResize: true });
+        }
+
+        if (!prefersReducedMotion && window.Lenis) {
+          const lenis = new Lenis({ duration: 0.92, smoothWheel: true, wheelMultiplier: 0.72, touchMultiplier: 1.05, lerp: 0.08 });
+          lenis.on("scroll", () => {
+            syncGlobalMotion();
+            if (window.ScrollTrigger) ScrollTrigger.update();
+          });
+          gsap.ticker.add((time) => lenis.raf(time * 1000));
+          gsap.ticker.lagSmoothing(0);
+        }
+
+        gsap.timeline({ defaults: { ease: "power3.out" } })
+          .from(copy, { y: 10, autoAlpha: 0.92, duration: 0.65 }, 0.05);
+
+        if (window.ScrollTrigger) ScrollTrigger.refresh();
+
+        if (prefersReducedMotion) {
+          updateProgress(0);
+          scrollToCurrentHash(120);
+        }
+      };
+
+      const onMetadata = () => {
+        hasMetadata = true;
+        video.pause();
+        const initialTime = Math.max(video.duration - 0.04, 0) * VIDEO_START_PROGRESS;
+        seekProxy.time = initialTime;
+        targetTime = initialTime;
+        if (typeof video.fastSeek === "function") video.fastSeek(initialTime);
+        else video.currentTime = initialTime;
+        lastAppliedTime = initialTime;
+        hideLoader();
+        initMotion();
+        syncGlobalMotion();
+      };
+
+      video.addEventListener("loadedmetadata", onMetadata, { once: true });
+      video.addEventListener("canplay", hideLoader, { once: true });
+
+      window.setTimeout(() => {
+        if (!hasMetadata) {
+          loader.textContent = "Prévia visual";
+          initMotion();
+        }
+      }, 2600);
+
+      video.load();
+    });
+  </script>
+</body>
+</html>
