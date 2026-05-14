@@ -36,9 +36,9 @@
       --card-y: 0px;
       --global-progress: 0;
       --video-opacity: 1;
-      --video-scale: 1.02;
+      --video-scale: 1.01;
       --video-y: 0px;
-      --video-brightness: 1.03;
+      --video-frame-inset: clamp(0.7rem, 1.6vw, 1.45rem);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -181,8 +181,12 @@
 
     .scroll-stage {
       position: relative;
-      min-height: 100vh;
-      min-height: 100svh;
+      min-height: auto;
+      isolation: isolate;
+    }
+
+    .hero-cinematic {
+      position: relative;
       isolation: isolate;
     }
 
@@ -194,6 +198,41 @@
       display: flex;
       flex-direction: column;
       padding: clamp(6.3rem, 12vh, 8.6rem) clamp(1rem, 2.8vw, 3rem) clamp(1.2rem, 2.5vw, 2.2rem);
+    }
+
+    .hero-sub {
+      position: relative;
+      z-index: 6;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: clamp(1rem, 4vw, 3rem) clamp(1rem, 2.8vw, 3rem) clamp(1.6rem, 4vw, 3rem);
+      pointer-events: none;
+    }
+
+    .hero-sub::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(247, 255, 240, 0.015), rgba(247, 255, 240, 0.09) 58%, rgba(247, 255, 240, 0.28)),
+        radial-gradient(circle at 75% 82%, rgba(185, 255, 54, 0.06), transparent 24rem);
+    }
+
+    .hero-sub-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      min-height: clamp(8rem, 16vw, 12rem);
+      opacity: var(--subhero-alpha, 0);
+      transform: translate3d(0, var(--subhero-y, 40px), 0);
+      will-change: transform, opacity;
     }
 
     .hero::before {
@@ -211,18 +250,6 @@
       animation: gridDrift 18s linear infinite;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      background:
-        linear-gradient(90deg, rgba(247, 255, 240, 0.96) 0%, rgba(247, 255, 240, 0.78) 32%, rgba(247, 255, 240, 0.14) 58%, rgba(247, 255, 240, 0.58) 100%),
-        linear-gradient(180deg, rgba(247, 255, 240, 0.78) 0%, transparent 31%, transparent 67%, rgba(247, 255, 240, 0.84) 100%),
-        radial-gradient(circle at 50% 42%, rgba(185, 255, 54, 0.13), transparent 27rem);
-    }
-
     .video-stage {
       position: fixed;
       inset: 0;
@@ -231,8 +258,8 @@
       opacity: var(--video-opacity);
       transform: translate3d(0, var(--video-y), 0) scale(var(--video-scale));
       transform-origin: center;
-      transition: opacity 0.22s ease;
-      will-change: transform, opacity;
+      transition: none;
+      backface-visibility: hidden;
     }
 
     .video-shell,
@@ -245,23 +272,27 @@
 
     .video-shell {
       overflow: hidden;
-      background: #eefddb;
+      background: #fafdf6;
     }
 
     .video-shell::after {
       content: "";
       position: absolute;
-      inset: clamp(0.9rem, 2vw, 1.8rem);
+      inset: var(--video-frame-inset);
       z-index: 4;
       pointer-events: none;
-      border: 1px solid rgba(255, 255, 255, 0.42);
+      border: 1px solid rgba(255, 255, 255, 0.26);
       border-radius: clamp(1.1rem, 2vw, 1.8rem);
     }
 
     video {
+      display: block;
       object-fit: cover;
-      transform: scale(1.02);
-      filter: saturate(1.08) contrast(1.02) brightness(var(--video-brightness));
+      object-position: 50% 50%;
+      transform: translate3d(0, 0, 0) scale(1.001);
+      filter: saturate(1.16) contrast(1.14) brightness(0.99);
+      -webkit-filter: saturate(1.16) contrast(1.14) brightness(0.99);
+      image-rendering: auto;
     }
 
     .video-loader {
@@ -296,7 +327,21 @@
       padding-top: clamp(1.95rem, 2.4vh, 2.9rem);
     }
 
-    .copy { max-width: 42rem; }
+    .copy {
+      position: relative;
+      max-width: 42rem;
+      padding: 0.2rem 0.9rem 1rem 0;
+    }
+
+    .copy::before {
+      content: "";
+      position: absolute;
+      inset: -0.6rem -1.4rem -0.9rem -0.75rem;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: 1.5rem;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.12) 62%, rgba(255, 255, 255, 0));
+    }
 
     .eyebrow {
       display: inline-flex;
@@ -336,8 +381,8 @@
       max-width: 11ch;
       margin-top: 1rem;
       color: var(--ink);
-      font-size: clamp(3.35rem, 7.45vw, 7.2rem);
-      line-height: 0.84;
+      font-size: clamp(2.85rem, 6.35vw, 6.1rem);
+      line-height: 0.78;
       letter-spacing: -0.065em;
       font-weight: 800;
     }
@@ -357,10 +402,11 @@
     .lead {
       max-width: 34rem;
       margin-top: 1.05rem;
-      color: rgba(40, 54, 34, 0.72);
-      font-size: clamp(1rem, 1.25vw, 1.17rem);
-      line-height: 1.62;
-      font-weight: 600;
+      color: rgba(28, 38, 23, 0.96);
+      font-size: clamp(1rem, 1.25vw, 1.16rem);
+      line-height: 1.44;
+      font-weight: 640;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.14);
     }
 
     .actions {
@@ -426,10 +472,11 @@
       align-items: start;
       max-width: 31rem;
       margin-top: 1.6rem;
-      color: rgba(74, 86, 66, 0.82);
+      color: rgba(42, 54, 35, 0.94);
       font-family: var(--font-mono);
-      font-size: 0.76rem;
-      line-height: 1.55;
+      font-size: 0.82rem;
+      line-height: 1.52;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.14);
     }
 
     .support::before {
@@ -437,7 +484,7 @@
       width: 2.5rem;
       height: 1px;
       margin-top: 0.58rem;
-      background: rgba(20, 85, 29, 0.24);
+      background: rgba(20, 85, 29, 0.44);
     }
 
     .video-label {
@@ -497,7 +544,7 @@
       position: relative;
       z-index: 6;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: flex-end;
       gap: 1.5rem;
     }
@@ -540,7 +587,7 @@
       z-index: 10;
       background:
         linear-gradient(180deg, rgba(247, 255, 240, 0.88), rgba(255, 255, 255, 0.86) 18%, rgba(251, 255, 247, 0.90));
-      border-top: 1px solid rgba(20, 85, 29, 0.12);
+      border-top: 1px solid rgba(20, 85, 29, 0.07);
       isolation: isolate;
     }
 
@@ -679,6 +726,39 @@
       align-items: start;
     }
 
+    .empresa-title,
+    .empresa-lead,
+    .empresa-stats,
+    .empresa-kicker,
+    .empresa-story {
+      will-change: transform, opacity;
+    }
+
+    .empresa-kicker {
+      opacity: var(--empresa-kicker-alpha, 0);
+      transform: translate3d(0, var(--empresa-kicker-y, -10px), 0);
+    }
+
+    .empresa-title {
+      opacity: var(--empresa-title-alpha, 0);
+      transform: translate3d(var(--empresa-title-x, -34px), var(--empresa-title-y, 12px), 0) scale(var(--empresa-title-scale, 0.982));
+    }
+
+    .empresa-lead {
+      opacity: var(--empresa-lead-alpha, 0);
+      transform: translate3d(var(--empresa-lead-x, -26px), var(--empresa-lead-y, 10px), 0) scale(var(--empresa-lead-scale, 0.986));
+    }
+
+    .empresa-stats {
+      opacity: var(--empresa-stats-alpha, 0);
+      transform: translate3d(var(--empresa-stats-x, -18px), 0, 0);
+    }
+
+    .empresa-story {
+      opacity: var(--empresa-story-alpha, 0);
+      transform: translate3d(var(--empresa-story-x, 72px), 0, 0) scale(var(--empresa-story-scale, 0.984));
+    }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -694,6 +774,19 @@
     }
 
     .stat-card { padding: 1.2rem; }
+
+    .empresa-stat-card {
+      opacity: var(--empresa-stat-alpha, 0);
+      transform: translate3d(var(--empresa-stat-x, -76px), var(--empresa-stat-y, 10px), 0) scale(var(--empresa-stat-scale, 0.976));
+      transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.32s ease, box-shadow 0.32s ease, background 0.32s ease;
+    }
+
+    .empresa-stat-card:hover {
+      transform: translate3d(var(--empresa-stat-x, 0px), calc(var(--empresa-stat-y, 0px) - 8px), 0) scale(1.014);
+      border-color: rgba(17, 154, 61, 0.25);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.995), rgba(243, 252, 238, 0.985));
+      box-shadow: 0 22px 54px rgba(57, 108, 20, 0.14), 0 0 0 1px rgba(185, 255, 54, 0.12) inset;
+    }
 
     .stat-card strong {
       display: block;
@@ -716,6 +809,17 @@
       padding: clamp(1.25rem, 3vw, 2.4rem);
       border-radius: 1.35rem;
       border-left-color: rgba(255, 255, 255, 0.48);
+      transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.32s ease, box-shadow 0.32s ease;
+    }
+
+    .story-card:hover {
+      transform: translate3d(0, -6px, 0);
+      border-color: rgba(35, 95, 45, 0.18);
+      box-shadow: 0 24px 56px rgba(57, 108, 20, 0.1);
+    }
+
+    .empresa-story:hover {
+      transform: translate3d(var(--empresa-story-x, 0px), -6px, 0) scale(var(--empresa-story-scale, 1));
     }
 
     .story-card p {
@@ -745,15 +849,25 @@
     .info-card {
       min-height: 13rem;
       padding: 1.35rem;
-      transition: transform 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease, background 0.32s ease;
+      opacity: var(--product-card-alpha, var(--card-alpha, 1));
+      transform: translate3d(0, calc(var(--card-y, 0px) + var(--product-card-y, 0px)), 0) scale(var(--product-card-scale, 1));
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease, filter 0.28s ease;
     }
 
     .info-card:hover,
     .channel-card:hover {
-      transform: translate3d(0, calc(var(--card-y, 0px) - 3px), 0);
-      border-color: rgba(35, 95, 45, 0.16);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(246, 252, 244, 0.96));
-      box-shadow: 0 18px 48px rgba(57, 108, 20, 0.09);
+      transform: translate3d(0, calc(var(--card-y, 0px) + var(--product-card-y, 0px) - 9px), 0) scale(var(--product-card-scale, 1));
+      border-color: rgba(35, 95, 45, 0.22);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(241, 252, 236, 0.97));
+      box-shadow: 0 22px 56px rgba(57, 108, 20, 0.14);
+      filter: saturate(1.04);
+    }
+
+    .info-card:hover .card-icon,
+    .channel-card:hover .card-icon {
+      transform: scale(1.08);
+      border-color: rgba(17, 154, 61, 0.24);
+      box-shadow: 0 10px 22px rgba(17, 154, 61, 0.12);
     }
 
     .card-icon {
@@ -767,6 +881,18 @@
       font-family: var(--font-mono);
       font-size: 0.75rem;
       font-weight: 900;
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .card-icon svg {
+      width: 1.1rem;
+      height: 1.1rem;
+      display: block;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .info-card h3,
@@ -991,8 +1117,15 @@
       .nav a::after { display: none; }
 
       .scroll-stage {
-        min-height: 100vh;
-        min-height: 100svh;
+        min-height: auto;
+      }
+
+      .hero-sub {
+        min-height: min(92svh, 46rem);
+      }
+
+      .hero-sub-inner {
+        min-height: clamp(6rem, 18vw, 8rem);
       }
 
       .hero {
@@ -1042,10 +1175,14 @@
 
       h1 {
         max-width: 10.5ch;
-        font-size: clamp(3rem, 16vw, 5.1rem);
+        font-size: clamp(2.55rem, 13.6vw, 4.35rem);
+        line-height: 0.82;
       }
 
-      .lead { font-size: 0.95rem; }
+      .lead {
+        font-size: 0.95rem;
+        line-height: 1.42;
+      }
 
       .actions { display: grid; grid-template-columns: 1fr; }
       .button { width: 100%; }
@@ -1055,6 +1192,11 @@
       .video-label { display: none; }
       .scroll-cue { margin-left: 0; }
       .batch { display: none; }
+
+      .copy::before {
+        inset: -0.35rem -0.55rem -0.5rem -0.35rem;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.18) 76%, rgba(255, 255, 255, 0));
+      }
 
       .section { padding: 4.3rem 1rem; }
       .stats-grid,
@@ -1118,13 +1260,22 @@
         transition-duration: 0.001ms !important;
       }
 
-      .scroll-stage { min-height: 100vh; }
+      .scroll-stage { min-height: auto; }
+      .hero-sub { min-height: auto; }
       .video-stage {
         position: absolute;
         opacity: 0.86;
         transform: none;
       }
       .no-motion-note { display: inline; }
+    }
+
+    @media (hover: none) {
+      .empresa-stat-card:hover {
+        transform: translate3d(var(--empresa-stat-x, 0px), var(--empresa-stat-y, 0px), 0) scale(var(--empresa-stat-scale, 1));
+        border-color: var(--glass-border-green);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+      }
     }
   </style>
 </head>
@@ -1147,37 +1298,51 @@
   </header>
 
   <section class="scroll-stage" id="hero" aria-label="Hero de venda de Limão Tahiti">
-    <div class="hero">
+    <div class="hero-cinematic">
       <div class="video-stage" data-parallax="video">
         <div class="video-shell">
-          <video id="heroVideo" src="video2.mp4" muted playsinline preload="auto" aria-label="Vídeo de Limão Tahiti selecionado"></video>
+          <video
+            id="heroVideo"
+            src="video2.mp4"
+            muted
+            playsinline
+            preload="auto"
+            disablepictureinpicture
+            disableremoteplayback
+            aria-label="Vídeo de Limão Tahiti e caixote de madeira"
+          ></video>
           <div class="video-loader" id="videoLoader">Carregando safra</div>
         </div>
       </div>
 
-      <div class="video-label">
-        <span class="ping" aria-hidden="true"></span>
-        Produção própria · Limão Tahiti
-      </div>
-
-      <div class="hero-content">
-        <div class="copy" data-parallax="copy">
-          <div class="eyebrow"><span class="ping" aria-hidden="true"></span>Grupo Vilac Foods · desde 2020</div>
-          <h1>Do campo ao cliente, <span class="transparent-word">qualidade</span> que nasce de uma história de confiança</h1>
-          <p class="lead">Produção própria, qualidade padronizada e fornecimento regular para mercados, distribuidores, restaurantes e compradores profissionais.</p>
-          <div class="actions" aria-label="Ações comerciais">
-            <a class="button button-primary" href="#contato">Solicitar cotação <span aria-hidden="true">→</span></a>
-            <a class="button button-secondary" href="#empresa">Conhecer a Vilac Citrus <span aria-hidden="true">＋</span></a>
-          </div>
-          <p class="support">Uma operação criada para unir tradição no ramo alimentício, boas práticas agrícolas, sustentabilidade e confiança no fornecimento.</p>
+      <div class="hero">
+        <div class="video-label">
+          <span class="ping" aria-hidden="true"></span>
+          Produção própria · Limão Tahiti
         </div>
 
+        <div class="hero-content">
+          <div class="copy" data-parallax="copy">
+            <div class="eyebrow"><span class="ping" aria-hidden="true"></span>Grupo Vilac Foods · desde 2020</div>
+            <h1>Do campo ao cliente, <span class="transparent-word">qualidade</span> que nasce de uma história de confiança</h1>
+            <p class="lead">Produção própria, qualidade padronizada e fornecimento regular para mercados, distribuidores, restaurantes e compradores profissionais.</p>
+            <div class="actions" aria-label="Ações comerciais">
+              <a class="button button-primary" href="#contato">Solicitar cotação <span aria-hidden="true">→</span></a>
+              <a class="button button-secondary" href="#empresa">Conhecer a Vilac Citrus <span aria-hidden="true">＋</span></a>
+            </div>
+            <p class="support">Uma operação criada para unir tradição no ramo alimentício, boas práticas agrícolas, sustentabilidade e confiança no fornecimento.</p>
+          </div>
+
+        </div>
+
+        <footer class="hero-footer">
+          <div class="batch">produção · seleção · fornecimento</div>
+        </footer>
       </div>
 
-      <footer class="hero-footer">
-        <div class="scroll-cue"><i aria-hidden="true">↓</i>Role para explorar a Vilac Citrus <span class="no-motion-note"> · movimento reduzido ativo</span></div>
-        <div class="batch">produção · seleção · fornecimento</div>
-      </footer>
+      <div class="hero-sub" aria-label="Continuação visual da Hero">
+        <div class="hero-sub-inner" aria-hidden="true"></div>
+      </div>
     </div>
   </section>
 
@@ -1185,18 +1350,18 @@
     <section class="section" id="empresa">
       <div class="section-inner history-layout reveal">
         <div>
-          <span class="section-kicker"><span class="ping" aria-hidden="true"></span>Empresa</span>
-          <h2 class="section-title">Nossa história nasce da experiência no alimento.</h2>
-          <p class="section-lead">A Vilac Citrus faz parte do Grupo Vilac Foods, grupo com mais de 25 anos de atuação no ramo alimentício e uma trajetória construída com qualidade, responsabilidade e compromisso com clientes.</p>
-          <div class="stats-grid">
-            <div class="stat-card"><strong>+25</strong><span>anos de experiência do Grupo Vilac Foods no setor alimentício.</span></div>
-            <div class="stat-card"><strong>2020</strong><span>ano de criação da Vilac Citrus, com foco em produção de cítrus.</span></div>
-            <div class="stat-card"><strong>Origem</strong><span>controle e cuidado em cada etapa, do campo ao cliente.</span></div>
-            <div class="stat-card"><strong>Regular</strong><span>fornecimento pensado para demanda comercial profissional.</span></div>
+          <span class="section-kicker empresa-kicker"><span class="ping" aria-hidden="true"></span>Empresa</span>
+          <h2 class="section-title empresa-title">Nossa história nasce da experiência no alimento.</h2>
+          <p class="section-lead empresa-lead">A Vilac Citrus faz parte do Grupo Vilac Foods, grupo com mais de 25 anos de atuação no ramo alimentício e uma trajetória construída com qualidade, responsabilidade e compromisso com clientes.</p>
+          <div class="stats-grid empresa-stats">
+            <div class="stat-card empresa-stat-card"><strong data-countup="+25" data-countup-target="25" data-countup-threshold="0.86">+00</strong><span>anos de experiência do Grupo Vilac Foods no setor alimentício.</span></div>
+            <div class="stat-card empresa-stat-card"><strong>2020</strong><span>ano de criação da Vilac Citrus, com foco em produção de cítrus.</span></div>
+            <div class="stat-card empresa-stat-card"><strong>Origem</strong><span>controle e cuidado em cada etapa, do campo ao cliente.</span></div>
+            <div class="stat-card empresa-stat-card"><strong>Regular</strong><span>fornecimento pensado para demanda comercial profissional.</span></div>
           </div>
         </div>
 
-        <div class="story-card">
+        <div class="story-card empresa-story">
           <p>Criada em 2020, a Vilac Citrus nasceu para unir a experiência do grupo a uma nova visão para a produção de cítrus: mais sustentável, eficiente e de alto rendimento, respeitando o meio ambiente e valorizando boas práticas agrícolas.</p>
           <p>Desde o início, nosso propósito é produzir e comercializar cítrus com qualidade, segurança e regularidade, oferecendo aos clientes a confiança de comprar de uma empresa estruturada, comprometida com a origem do produto e preparada para atender diferentes demandas do mercado.</p>
           <p>Mais do que vender frutas, buscamos entregar um produto que representa cuidado em cada etapa. Cada limão produzido pela Vilac Citrus carrega a força da nossa experiência, o compromisso com a sustentabilidade e a excelência que fazem parte da história do Grupo Vilac Foods.</p>
@@ -1211,12 +1376,12 @@
         <h2 class="section-title">Limão Tahiti selecionado para operação comercial.</h2>
         <p class="section-lead">Produto fresco, padronizado e com aparência comercial para supermercados, atacados, distribuidores, restaurantes, hotéis e compradores profissionais.</p>
         <div class="products-grid">
-          <article class="info-card"><div class="card-icon">01</div><h3>Padrão comercial</h3><p>Calibre, casca, cor e firmeza avaliados para melhor apresentação e giro.</p></article>
-          <article class="info-card"><div class="card-icon">02</div><h3>Seleção por qualidade</h3><p>Triagem visual e cuidado no lote para reduzir variação e aumentar confiança.</p></article>
-          <article class="info-card"><div class="card-icon">03</div><h3>Frescor e rendimento</h3><p>Limão natural, suculento e adequado para uso comercial e culinário.</p></article>
-          <article class="info-card"><div class="card-icon">04</div><h3>Fornecimento regular</h3><p>Atendimento pensado para compras recorrentes e planejamento de volume.</p></article>
-          <article class="info-card"><div class="card-icon">05</div><h3>Produto para atacado</h3><p>Condições comerciais para mercados, Ceasa, distribuidores e food service.</p></article>
-          <article class="info-card"><div class="card-icon">06</div><h3>Do campo ao cliente</h3><p>Cuidado no processo para preservar qualidade, origem e confiabilidade.</p></article>
+          <article class="info-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16.5 12 12l8 4.5"></path><path d="M4 7.5 12 3l8 4.5-8 4.5-8-4.5Z"></path><path d="M4 12l8 4.5 8-4.5"></path></svg></div><h3>Padrão comercial</h3><p>Calibre, casca, cor e firmeza avaliados para melhor apresentação e giro.</p></article>
+          <article class="info-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 19 7v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V7l7-4Z"></path><path d="m9.5 12 1.8 1.8 3.7-3.8"></path></svg></div><h3>Seleção por qualidade</h3><p>Triagem visual e cuidado no lote para reduzir variação e aumentar confiança.</p></article>
+          <article class="info-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4c3.8 0 7 3.1 7 7s-3.2 9-7 9-7-5.1-7-9 3.2-7 7-7Z"></path><path d="M12 4c1.9 2 3 4.4 3 7 0 2.6-1.1 5-3 7"></path><path d="M9 15c1.3.8 3 .8 4.4 0"></path></svg></div><h3>Frescor e rendimento</h3><p>Limão natural, suculento e adequado para uso comercial e culinário.</p></article>
+          <article class="info-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 17h14"></path><path d="M7 17V9h10v8"></path><path d="M9 9V6h6v3"></path><path d="M3 17h18v3H3z"></path></svg></div><h3>Fornecimento regular</h3><p>Atendimento pensado para compras recorrentes e planejamento de volume.</p></article>
+          <article class="info-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h11l3 3v5H4z"></path><path d="M15 8V5h3l2 3"></path><circle cx="8" cy="17" r="1.7"></circle><circle cx="16" cy="17" r="1.7"></circle></svg></div><h3>Produto para atacado</h3><p>Condições comerciais para mercados, Ceasa, distribuidores e food service.</p></article>
+          <article class="info-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20c4.4-2.6 7-6.2 7-10.2C19 6.4 16 4 12 4S5 6.4 5 9.8C5 13.8 7.6 17.4 12 20Z"></path><path d="M12 8v6"></path><path d="M9.5 11.5 12 14l2.5-2.5"></path></svg></div><h3>Do campo ao cliente</h3><p>Cuidado no processo para preservar qualidade, origem e confiabilidade.</p></article>
         </div>
       </div>
     </section>
@@ -1227,10 +1392,10 @@
         <h2 class="section-title">Atendimento comercial para diferentes canais.</h2>
         <p class="section-lead">Estrutura para atender compradores que buscam regularidade, qualidade e confiança no fornecimento de Limão Tahiti.</p>
         <div class="channels-grid">
-          <article class="channel-card"><div class="card-icon">M</div><h3>Mercados e supermercados</h3><p>Lotes com padrão visual para exposição, giro e reposição de gôndola.</p></article>
-          <article class="channel-card"><div class="card-icon">A</div><h3>Distribuidores e atacado</h3><p>Abastecimento com volume, regularidade e negociação profissional.</p></article>
-          <article class="channel-card"><div class="card-icon">F</div><h3>Food service</h3><p>Restaurantes, hotéis e cozinhas profissionais que precisam de rendimento.</p></article>
-          <article class="channel-card"><div class="card-icon">C</div><h3>Compradores profissionais</h3><p>Atendimento objetivo para quem compra com critério e demanda previsibilidade.</p></article>
+          <article class="channel-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8Z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg></div><h3>Mercados e supermercados</h3><p>Lotes com padrão visual para exposição, giro e reposição de gôndola.</p></article>
+          <article class="channel-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10h18"></path><path d="M5 10V7l7-4 7 4v3"></path><path d="M6 10v9"></path><path d="M12 10v9"></path><path d="M18 10v9"></path><path d="M4 19h16"></path></svg></div><h3>Distribuidores e atacado</h3><p>Abastecimento com volume, regularidade e negociação profissional.</p></article>
+          <article class="channel-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3v8"></path><path d="M10 3v8"></path><path d="M7 7h3"></path><path d="M8.5 11v10"></path><path d="M16 3v18"></path><path d="M14 3c2.4 1.6 3.4 4.6 2 7"></path></svg></div><h3>Food service</h3><p>Restaurantes, hotéis e cozinhas profissionais que precisam de rendimento.</p></article>
+          <article class="channel-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 20v-1.5A4.5 4.5 0 0 1 12.5 14h3A4.5 4.5 0 0 1 20 18.5V20"></path><circle cx="14" cy="8" r="4"></circle><path d="M3 12l2 2 4-5"></path></svg></div><h3>Compradores profissionais</h3><p>Atendimento objetivo para quem compra com critério e demanda previsibilidade.</p></article>
         </div>
         <div class="commercial-callout">
           <p>Fale com nossa equipe comercial e encontre a melhor condição para o seu volume de compra.</p>
@@ -1246,15 +1411,15 @@
           <h2 class="section-title">Solicite uma cotação.</h2>
           <p class="section-lead">Entre em contato para consultar disponibilidade, preço, volume mínimo e condições de entrega para sua operação.</p>
           <div class="actions contact-actions">
-            <a class="button button-primary" href="https://wa.me/558491977416">Chamar no WhatsApp <span aria-hidden="true">→</span></a>
+            <a class="button button-primary" href="https://wa.me/5584991977416">Chamar no WhatsApp <span aria-hidden="true">→</span></a>
             <a class="button button-secondary" href="mailto:j.arinos@vilaccitrus.com.br">Enviar e-mail <span aria-hidden="true">＋</span></a>
           </div>
         </div>
 
         <aside class="contact-panel" aria-label="Informações comerciais">
-          <div class="contact-row"><span>WhatsApp</span><strong>+55 (84) 9197-7416</strong></div>
+          <div class="contact-row"><span>WhatsApp</span><strong>+55 (84) 99197-7416</strong></div>
           <div class="contact-row"><span>E-mail</span><strong>j.arinos@vilaccitrus.com.br</strong></div>
-          <div class="contact-row"><span>Região de atendimento</span><strong>Europa, América do Norte, América do Sul</strong></div>
+          <div class="contact-row"><span>Região de atendimento</span><strong>América do Norte, América do Sul, Europa</strong></div>
           <div class="contact-row"><span>Horário comercial</span><strong>Segunda a sexta · 8h às 18h</strong></div>
         </aside>
       </div>
@@ -1284,8 +1449,19 @@
       const progressRing = document.getElementById("progressRing");
       const progressText = document.getElementById("progressText");
       const copy = document.querySelector('[data-parallax="copy"]');
+      const scrollStage = document.getElementById("hero");
+      const subHeroInner = document.querySelector(".hero-sub-inner");
+      const empresaSection = document.getElementById("empresa");
+      const empresaKicker = document.querySelector(".empresa-kicker");
+      const empresaTitle = document.querySelector(".empresa-title");
+      const empresaLead = document.querySelector(".empresa-lead");
+      const empresaStats = document.querySelector(".empresa-stats");
+      const empresaStory = document.querySelector(".empresa-story");
+      const empresaStatCards = Array.from(document.querySelectorAll(".empresa-stat-card"));
+      const productCards = Array.from(document.querySelectorAll("#produtos .info-card"));
+      const countUpElements = Array.from(document.querySelectorAll("[data-countup]"));
       const motionBlocks = [
-        { type: "hero", element: document.querySelector(".hero"), target: copy },
+        { type: "hero", element: scrollStage, target: copy },
         ...Array.from(document.querySelectorAll(".section")).map((section) => ({
           type: "section",
           element: section,
@@ -1293,17 +1469,32 @@
         }))
       ].filter((item) => item.element && item.target);
       const glassItems = Array.from(document.querySelectorAll(".stat-card, .info-card, .channel-card, .contact-panel, .story-card, .commercial-callout"));
-      const seekProxy = { time: 0 };
-      const VIDEO_START_PROGRESS = 0.34;
+      let lenisRef = null;
+      const scrollElementIntoView = (target, { immediate = false } = {}) => {
+        if (!target) return;
+        const offset = -Math.round(header.offsetHeight || 96);
+        if (lenisRef && !prefersReducedMotion) {
+          if (immediate) lenisRef.scrollTo(target, { offset, immediate: true });
+          else lenisRef.scrollTo(target, { offset, duration: 1.05 });
+        } else {
+          target.scrollIntoView({ behavior: prefersReducedMotion || immediate ? "auto" : "smooth", block: "start" });
+        }
+      };
+      const seekProxy = { time: 0, target: 0, lastSeekAt: 0 };
+      const VIDEO_START_PROGRESS = 0.04;
+      const VIDEO_SCROLL_CAP_PROGRESS = 0.985;
+      const VIDEO_END_TRIM_SEC = 3.2;
       const rootStyle = document.documentElement.style;
       let targetTime = 0;
-      let lastAppliedTime = -1;
       let hasMetadata = false;
       let motionStarted = false;
       let enhancementsStarted = false;
       let currentProgress = 0;
       let targetProgress = 0;
       let rafId = 0;
+      let countUpObserver = null;
+      let empresaRevealProgress = 0;
+      let empresaCountStarted = false;
 
       const setHeaderState = () => {
         header.classList.toggle("is-scrolled", window.scrollY > 12);
@@ -1313,7 +1504,7 @@
         if (!window.location.hash) return;
         const target = document.querySelector(window.location.hash);
         if (!target) return;
-        window.setTimeout(() => target.scrollIntoView({ behavior: "auto", block: "start" }), delay);
+        window.setTimeout(() => scrollElementIntoView(target, { immediate: true }), delay);
       };
 
       setHeaderState();
@@ -1330,7 +1521,7 @@
           const target = document.querySelector(link.getAttribute("href"));
           if (target) {
             event.preventDefault();
-            target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+            scrollElementIntoView(target);
             history.pushState(null, "", link.getAttribute("href"));
           }
           nav.classList.remove("is-open");
@@ -1348,21 +1539,30 @@
 
       const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
 
-      const getMaxScroll = () => {
-        const documentHeight = Math.max(
-          document.documentElement.scrollHeight,
-          document.body.scrollHeight,
-          document.documentElement.offsetHeight,
-          document.body.offsetHeight
-        );
-        return Math.max(documentHeight - window.innerHeight, 1);
+      const getHeroCinematicProgress = () => {
+        if (!scrollStage) return 0;
+        const sectionTop = scrollStage.offsetTop;
+        const sectionBottom = scrollStage.offsetTop + scrollStage.offsetHeight;
+        const vh = window.innerHeight;
+        const trackEnd = Math.max(sectionBottom - vh, sectionTop + 1);
+        const scrollY = (() => {
+          if (!lenisRef) return window.scrollY;
+          if (typeof lenisRef.animatedScroll === "number") return lenisRef.animatedScroll;
+          if (typeof lenisRef.scroll === "number") return lenisRef.scroll;
+          return window.scrollY;
+        })();
+        const raw = (scrollY - sectionTop) / Math.max(trackEnd - sectionTop, 1);
+        return clamp(raw, 0, 1);
       };
 
-      const getScrollProgress = () => {
-        const maxScroll = getMaxScroll();
-        const rawProgress = window.scrollY / maxScroll;
-        const isAtEnd = window.scrollY >= maxScroll - 2;
-        return isAtEnd ? 1 : clamp(rawProgress, 0, 0.995);
+      const getScrubSpan = () => {
+        if (!Number.isFinite(video.duration) || video.duration <= 0) return 0;
+        return Math.max(video.duration - VIDEO_END_TRIM_SEC, 0.08);
+      };
+
+      const getScrubTimeCap = () => {
+        const span = getScrubSpan();
+        return Math.max(span - 0.035, 0);
       };
 
       const updateProgress = (progress) => {
@@ -1374,50 +1574,67 @@
       const applyVisualState = (progress) => {
         const clamped = clamp(progress);
         const isMobile = window.matchMedia("(max-width: 760px)").matches;
-        const heroProgress = clamp(window.scrollY / Math.max(window.innerHeight, 1));
-        const opacity = isMobile ? 0.50 - clamped * 0.08 : 0.74 - clamped * 0.12;
-        const heroBoost = (1 - heroProgress) * (isMobile ? 0.18 : 0.22);
-        const scale = 1.01 + clamped * (isMobile ? 0.012 : 0.022);
-        const y = clamped * (isMobile ? -5 : -12);
-        const brightness = 1.01 + clamped * 0.02;
+        const heroProgress = clamped;
+        const opacity = isMobile ? 0.91 - clamped * 0.04 : 0.97 - clamped * 0.045;
+        const heroBoost = (1 - heroProgress) * (isMobile ? 0.03 : 0.04);
+        const scale = 1.012 + clamped * (isMobile ? 0.014 : 0.022);
+        const y = clamped * (isMobile ? -3 : -8);
+        const insetStart = isMobile ? 12 : 22;
+        const insetEnd = isMobile ? 5 : 7;
+        const insetPx = insetEnd + (insetStart - insetEnd) * (1 - clamped);
 
         rootStyle.setProperty("--global-progress", clamped.toFixed(4));
-        rootStyle.setProperty("--video-opacity", clamp(opacity + heroBoost, isMobile ? 0.40 : 0.56, 0.96).toFixed(4));
+        rootStyle.setProperty("--video-opacity", clamp(opacity + heroBoost, isMobile ? 0.88 : 0.94, 1).toFixed(4));
         rootStyle.setProperty("--video-scale", scale.toFixed(4));
         rootStyle.setProperty("--video-y", `${y.toFixed(2)}px`);
-        rootStyle.setProperty("--video-brightness", brightness.toFixed(3));
+        rootStyle.setProperty("--video-frame-inset", `${insetPx.toFixed(1)}px`);
         updateProgress(clamped);
-        requestScrub(clamped);
       };
 
-      const applyVideoTime = () => {
+      const SCRUB_FPS = 30;
+      const scrubQuantize = (t) => Math.round(t * SCRUB_FPS) / SCRUB_FPS;
+
+      const syncVideoFromScroll = () => {
         if (!hasMetadata || prefersReducedMotion || video.readyState < 1) return;
-        const desiredTime = Math.max(0, Math.min(video.duration || 0, seekProxy.time));
-        if (Math.abs(desiredTime - lastAppliedTime) < 1 / 45) return;
-        try {
-          const distance = Math.abs(desiredTime - video.currentTime);
-          if (distance > 0.42 && typeof video.fastSeek === "function") video.fastSeek(desiredTime);
-          else video.currentTime = desiredTime;
-          lastAppliedTime = desiredTime;
-        } catch (error) {
-          lastAppliedTime = video.currentTime || 0;
-        }
-      };
+        const cap = getScrubTimeCap();
+        const vct = video.currentTime || 0;
+        const now = performance.now();
+        const isMobile = window.matchMedia("(max-width: 760px)").matches;
+        const minSeekInterval = isMobile ? 92 : 72;
+        let applyT;
 
-      const scrubTick = (easing = 0.18) => {
-        if (!hasMetadata || prefersReducedMotion) return;
-        const delta = targetTime - seekProxy.time;
-        seekProxy.time += delta * easing;
-        if (Math.abs(delta) < 0.003) seekProxy.time = targetTime;
-        applyVideoTime();
+        if (currentProgress >= 0.997) {
+          applyT = scrubQuantize(cap);
+        } else {
+          applyT = scrubQuantize(Math.min(seekProxy.time, cap));
+        }
+
+        const diff = Math.abs(applyT - vct);
+        const largeJump = diff > 0.42;
+        if (diff < 0.055) return;
+        if (!largeJump && now - seekProxy.lastSeekAt < minSeekInterval) return;
+
+        if (video.seeking) {
+          if (diff < 0.32) return;
+        }
+
+        try {
+          video.currentTime = applyT;
+          seekProxy.lastSeekAt = now;
+        } catch (e) {
+          /* ignore */
+        }
       };
 
       const requestScrub = (progress) => {
         if (!hasMetadata || !Number.isFinite(video.duration) || video.duration <= 0) return;
-        const safeDuration = Math.max(video.duration - 0.04, 0);
+        const scrubSpan = getScrubSpan();
+        const cap = getScrubTimeCap();
         const scrollProgress = Math.max(0, Math.min(1, progress));
-        const mappedProgress = VIDEO_START_PROGRESS + (1 - VIDEO_START_PROGRESS) * scrollProgress;
-        targetTime = safeDuration * mappedProgress;
+        const mappedProgress = VIDEO_START_PROGRESS + (VIDEO_SCROLL_CAP_PROGRESS - VIDEO_START_PROGRESS) * scrollProgress;
+        targetTime = scrubSpan * mappedProgress;
+        if (targetTime > cap) targetTime = cap;
+        seekProxy.target = targetTime;
       };
 
       const getBlockPresence = (element) => {
@@ -1430,12 +1647,142 @@
         return clamp(Math.min(enter, exit));
       };
 
+      const getEmpresaScrollProgress = () => {
+        if (!empresaSection) return 1;
+        const rect = empresaSection.getBoundingClientRect();
+        const viewport = window.innerHeight || document.documentElement.clientHeight;
+        const isMobile = window.matchMedia("(max-width: 760px)").matches;
+        const start = viewport * 0.94;
+        const end = viewport * (isMobile ? 0.34 : 0.26);
+        const progress = clamp((start - rect.top) / Math.max(start - end, 1));
+
+        if (progress < 0.04 && rect.top > viewport * 0.82) {
+          empresaCountStarted = false;
+          countUpElements.forEach((element) => {
+            element.dataset.countupStarted = "false";
+            element.textContent = formatCountValue(element, 0);
+          });
+        }
+
+        return progress;
+      };
+
+      const formatCountValue = (element, value) => {
+        const prefix = (element.dataset.countup || "").replace(/[0-9]/g, "") || "";
+        return `${prefix}${String(value).padStart(2, "0")}`;
+      };
+
+      const startCountUp = (element) => {
+        if (!element || element.dataset.countupStarted === "true") return;
+        element.dataset.countupStarted = "true";
+        const target = Number(element.dataset.countupTarget || 0);
+
+        if (prefersReducedMotion || target <= 0) {
+          element.textContent = formatCountValue(element, target);
+          return;
+        }
+
+        const durationMs = Number(element.dataset.countupDuration || 1500);
+        const stepMs = Math.max(durationMs / target, 16);
+        const startTime = performance.now();
+
+        const tick = (now) => {
+          const elapsed = now - startTime;
+          const current = Math.min(target, Math.floor(elapsed / stepMs));
+          element.textContent = formatCountValue(element, current);
+          if (current < target) window.requestAnimationFrame(tick);
+        };
+
+        window.requestAnimationFrame(tick);
+      };
+
+      const initCountUps = () => {
+        if (!countUpElements.length) return;
+
+        countUpElements.forEach((element) => {
+          element.textContent = formatCountValue(element, 0);
+        });
+
+        if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+          return;
+        }
+      };
+
       const applyBlockMotion = (progress) => {
         const isMobile = window.matchMedia("(max-width: 760px)").matches;
+        const subHeroReveal = clamp((progress - 0.38) / 0.62);
+
+        if (subHeroInner) {
+          const subHeroY = (1 - subHeroReveal) * (isMobile ? 18 : 32);
+          rootStyle.setProperty("--subhero-alpha", subHeroReveal.toFixed(4));
+          rootStyle.setProperty("--subhero-y", `${subHeroY.toFixed(2)}px`);
+        }
+
+        const empresaProgress = empresaRevealProgress;
+        const kickerProgress = clamp(empresaProgress / 0.30);
+        const titleProgress = clamp((empresaProgress - 0.06) / 0.50);
+        const leadProgress = clamp((empresaProgress - 0.10) / 0.52);
+
+        if (empresaKicker) {
+          rootStyle.setProperty("--empresa-kicker-alpha", kickerProgress.toFixed(4));
+          rootStyle.setProperty("--empresa-kicker-y", `${((1 - kickerProgress) * (isMobile ? -6 : -10)).toFixed(2)}px`);
+        }
+
+        if (empresaTitle) {
+          rootStyle.setProperty("--empresa-title-alpha", titleProgress.toFixed(4));
+          rootStyle.setProperty("--empresa-title-x", `${((1 - titleProgress) * (isMobile ? 0 : -34)).toFixed(2)}px`);
+          rootStyle.setProperty("--empresa-title-y", `${((1 - titleProgress) * (isMobile ? 18 : 12)).toFixed(2)}px`);
+          rootStyle.setProperty("--empresa-title-scale", `${(0.982 + titleProgress * 0.018).toFixed(4)}`);
+        }
+
+        if (empresaLead) {
+          rootStyle.setProperty("--empresa-lead-alpha", leadProgress.toFixed(4));
+          rootStyle.setProperty("--empresa-lead-x", `${((1 - leadProgress) * (isMobile ? 0 : -26)).toFixed(2)}px`);
+          rootStyle.setProperty("--empresa-lead-y", `${((1 - leadProgress) * (isMobile ? 14 : 10)).toFixed(2)}px`);
+          rootStyle.setProperty("--empresa-lead-scale", `${(0.986 + leadProgress * 0.014).toFixed(4)}`);
+        }
+
+        if (empresaStats) {
+          const statsProgress = clamp((empresaProgress - 0.24) / 0.66);
+          rootStyle.setProperty("--empresa-stats-alpha", statsProgress.toFixed(4));
+          rootStyle.setProperty("--empresa-stats-x", `${((1 - statsProgress) * (isMobile ? 0 : -18)).toFixed(2)}px`);
+        }
+
+        if (empresaStory) {
+          const storyProgress = clamp((empresaProgress - 0.20) / 0.68);
+          rootStyle.setProperty("--empresa-story-alpha", storyProgress.toFixed(4));
+          rootStyle.setProperty("--empresa-story-x", `${((1 - storyProgress) * (isMobile ? 0 : 72)).toFixed(2)}px`);
+          rootStyle.setProperty("--empresa-story-scale", `${(0.984 + storyProgress * 0.016).toFixed(4)}`);
+        }
+
+        empresaStatCards.forEach((card, index) => {
+          const stagger = index * (isMobile ? 0.055 : 0.085);
+          const base = clamp((empresaProgress - 0.26 - stagger) / 0.50);
+          const easedPresence = base * base * (3 - 2 * base);
+          card.style.setProperty("--empresa-stat-alpha", easedPresence.toFixed(4));
+          card.style.setProperty("--empresa-stat-x", `${((1 - easedPresence) * (isMobile ? 0 : -76)).toFixed(2)}px`);
+          card.style.setProperty("--empresa-stat-y", `${((1 - easedPresence) * (isMobile ? 18 : 10)).toFixed(2)}px`);
+          card.style.setProperty("--empresa-stat-scale", `${(0.976 + easedPresence * 0.024).toFixed(4)}`);
+        });
+
+        productCards.forEach((card, index) => {
+          const presence = getBlockPresence(card);
+          const rowOffset = Math.floor(index / 3) * (isMobile ? 0.05 : 0.07);
+          const colOffset = (index % 3) * 0.03;
+          const stagedPresence = clamp((presence - rowOffset - colOffset) / Math.max(1 - rowOffset - colOffset, 0.2));
+          card.style.setProperty("--product-card-alpha", (0.84 + stagedPresence * 0.16).toFixed(4));
+          card.style.setProperty("--product-card-y", `${((1 - stagedPresence) * (isMobile ? 18 : 30)).toFixed(2)}px`);
+          card.style.setProperty("--product-card-scale", `${(0.976 + stagedPresence * 0.024).toFixed(4)}`);
+        });
+
+        if (!empresaCountStarted && empresaProgress >= 0.62) {
+          empresaCountStarted = true;
+          countUpElements.forEach((element) => startCountUp(element));
+        }
 
         motionBlocks.forEach(({ type, element, target }) => {
           if (type === "hero") {
-            const heroDepth = clamp(window.scrollY / Math.max(element.offsetHeight, window.innerHeight, 1));
+            const heroDepth = clamp(progress);
             const y = heroDepth * (isMobile ? -12 : -22);
             const alpha = 1 - heroDepth * (isMobile ? 0.10 : 0.16);
             target.style.opacity = clamp(alpha, 0.82, 1).toFixed(4);
@@ -1473,13 +1820,17 @@
       const motionTick = () => {
         rafId = 0;
         const delta = targetProgress - currentProgress;
-        currentProgress += delta * 0.14;
+        currentProgress += delta * 0.26;
         if (Math.abs(delta) < 0.0008) currentProgress = targetProgress;
+        empresaRevealProgress = getEmpresaScrollProgress();
 
         updateGlobalAnimation(currentProgress);
-        scrubTick(0.22);
+        requestScrub(currentProgress);
+        seekProxy.time += (seekProxy.target - seekProxy.time) * (window.matchMedia("(max-width: 760px)").matches ? 0.18 : 0.14);
+        if (Math.abs(seekProxy.target - seekProxy.time) < 0.01) seekProxy.time = seekProxy.target;
+        syncVideoFromScroll();
 
-        if (Math.abs(targetProgress - currentProgress) > 0.0008 || Math.abs(targetTime - seekProxy.time) > 0.004) {
+        if (Math.abs(targetProgress - currentProgress) > 0.0008 || Math.abs(seekProxy.target - seekProxy.time) > 0.01) {
           rafId = window.requestAnimationFrame(motionTick);
         }
       };
@@ -1489,9 +1840,11 @@
       };
 
       const syncGlobalMotion = () => {
-        targetProgress = getScrollProgress();
+        targetProgress = getHeroCinematicProgress();
         requestMotionFrame();
       };
+
+      const onWindowScrollMotion = () => syncGlobalMotion();
 
       const startGlobalMotion = () => {
         if (motionStarted) return;
@@ -1508,20 +1861,55 @@
             target.style.setProperty("--section-y", "0px");
             target.style.setProperty("--section-scale", "1");
           });
+          rootStyle.setProperty("--empresa-kicker-alpha", "1");
+          rootStyle.setProperty("--empresa-kicker-y", "0px");
+          rootStyle.setProperty("--empresa-title-alpha", "1");
+          rootStyle.setProperty("--empresa-title-x", "0px");
+          rootStyle.setProperty("--empresa-title-y", "0px");
+          rootStyle.setProperty("--empresa-title-scale", "1");
+          rootStyle.setProperty("--empresa-lead-alpha", "1");
+          rootStyle.setProperty("--empresa-lead-x", "0px");
+          rootStyle.setProperty("--empresa-lead-y", "0px");
+          rootStyle.setProperty("--empresa-lead-scale", "1");
+          rootStyle.setProperty("--empresa-stats-alpha", "1");
+          rootStyle.setProperty("--empresa-stats-x", "0px");
+          rootStyle.setProperty("--empresa-story-alpha", "1");
+          rootStyle.setProperty("--empresa-story-x", "0px");
+          rootStyle.setProperty("--empresa-story-scale", "1");
+          empresaStatCards.forEach((card) => {
+            card.style.setProperty("--empresa-stat-alpha", "1");
+            card.style.setProperty("--empresa-stat-x", "0px");
+            card.style.setProperty("--empresa-stat-y", "0px");
+            card.style.setProperty("--empresa-stat-scale", "1");
+          });
+          productCards.forEach((card) => {
+            card.style.setProperty("--product-card-alpha", "1");
+            card.style.setProperty("--product-card-y", "0px");
+            card.style.setProperty("--product-card-scale", "1");
+          });
+          rootStyle.setProperty("--subhero-alpha", "1");
+          rootStyle.setProperty("--subhero-y", "0px");
           glassItems.forEach((item) => {
             item.style.setProperty("--card-alpha", "1");
             item.style.setProperty("--card-y", "0px");
+          });
+          countUpElements.forEach((element) => {
+            element.dataset.countupStarted = "true";
+            element.textContent = formatCountValue(element, Number(element.dataset.countupTarget || 0));
           });
           updateProgress(0);
           scrollToCurrentHash(120);
           return;
         }
 
-        currentProgress = getScrollProgress();
+        currentProgress = getHeroCinematicProgress();
         targetProgress = currentProgress;
+        empresaRevealProgress = getEmpresaScrollProgress();
+        requestScrub(currentProgress);
+        seekProxy.time = seekProxy.target;
         updateGlobalAnimation(currentProgress);
 
-        window.addEventListener("scroll", syncGlobalMotion, { passive: true });
+        window.addEventListener("scroll", onWindowScrollMotion, { passive: true });
         window.addEventListener("resize", syncGlobalMotion);
         syncGlobalMotion();
         scrollToCurrentHash(120);
@@ -1542,11 +1930,32 @@
         }
 
         if (!prefersReducedMotion && window.Lenis) {
-          const lenis = new Lenis({ duration: 0.92, smoothWheel: true, wheelMultiplier: 0.72, touchMultiplier: 1.05, lerp: 0.08 });
+          window.removeEventListener("scroll", onWindowScrollMotion);
+          const lenis = new Lenis({
+            duration: 1.05,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+            smoothTouch: false,
+            wheelMultiplier: 1,
+            touchMultiplier: 1,
+            lerp: 0.14
+          });
+          lenisRef = lenis;
           lenis.on("scroll", () => {
             syncGlobalMotion();
             if (window.ScrollTrigger) ScrollTrigger.update();
           });
+          if (window.ScrollTrigger) {
+            ScrollTrigger.scrollerProxy(document.documentElement, {
+              scrollTop(value) {
+                if (arguments.length) lenis.scrollTo(value, { immediate: true });
+                return lenis.scroll;
+              },
+              getBoundingClientRect() {
+                return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+              }
+            });
+          }
           gsap.ticker.add((time) => lenis.raf(time * 1000));
           gsap.ticker.lagSmoothing(0);
         }
@@ -1565,19 +1974,35 @@
       const onMetadata = () => {
         hasMetadata = true;
         video.pause();
-        const initialTime = Math.max(video.duration - 0.04, 0) * VIDEO_START_PROGRESS;
+        const scrubSpan = getScrubSpan();
+        const cap = getScrubTimeCap();
+        const initialTime = scrubQuantize(Math.min(scrubSpan * VIDEO_START_PROGRESS, cap));
         seekProxy.time = initialTime;
         targetTime = initialTime;
-        if (typeof video.fastSeek === "function") video.fastSeek(initialTime);
-        else video.currentTime = initialTime;
-        lastAppliedTime = initialTime;
+        try {
+          video.currentTime = initialTime;
+        } catch (e) {
+          /* ignore */
+        }
         hideLoader();
+        initCountUps();
         initMotion();
         syncGlobalMotion();
       };
 
       video.addEventListener("loadedmetadata", onMetadata, { once: true });
       video.addEventListener("canplay", hideLoader, { once: true });
+      video.addEventListener("ended", () => {
+        if (!hasMetadata || prefersReducedMotion) return;
+        try {
+          video.pause();
+          const cap = getScrubTimeCap();
+          const endSnap = scrubQuantize(cap);
+          if (video.currentTime > endSnap + 0.02) video.currentTime = endSnap;
+        } catch (e) {
+          /* ignore */
+        }
+      });
 
       window.setTimeout(() => {
         if (!hasMetadata) {
