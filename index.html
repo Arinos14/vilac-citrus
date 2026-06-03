@@ -32,15 +32,15 @@
       --glass-border: rgba(35, 95, 45, 0.10);
       --glass-border-green: rgba(35, 95, 45, 0.14);
       --glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
-      --card-premium-bg: linear-gradient(145deg, rgba(18, 56, 31, 0.965), rgba(8, 27, 18, 0.955) 58%, rgba(23, 78, 32, 0.94));
-      --card-premium-hover-bg: linear-gradient(145deg, rgba(25, 76, 39, 0.985), rgba(10, 33, 22, 0.975) 56%, rgba(33, 96, 40, 0.96));
-      --card-premium-border: rgba(218, 180, 90, 0.42);
-      --card-premium-border-soft: rgba(185, 255, 54, 0.18);
-      --card-premium-shadow: 0 22px 54px rgba(5, 18, 10, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.07) inset, inset 0 1px 0 rgba(255, 255, 255, 0.13);
-      --card-premium-shadow-hover: 0 30px 74px rgba(5, 18, 10, 0.34), 0 0 0 1px rgba(246, 185, 0, 0.18) inset, inset 0 1px 0 rgba(255, 255, 255, 0.18);
-      --card-premium-title: #f7fff0;
-      --card-premium-text: rgba(233, 244, 226, 0.82);
-      --card-premium-accent: #f2c75b;
+      --card-premium-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.975), rgba(247, 252, 244, 0.955) 58%, rgba(239, 249, 233, 0.94));
+      --card-premium-hover-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.992), rgba(245, 252, 241, 0.975) 56%, rgba(236, 248, 230, 0.96));
+      --card-premium-border: rgba(49, 94, 52, 0.20);
+      --card-premium-border-soft: rgba(35, 95, 45, 0.12);
+      --card-premium-shadow: 0 18px 44px rgba(35, 95, 45, 0.105), 0 3px 16px rgba(16, 20, 13, 0.045), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+      --card-premium-shadow-hover: 0 24px 58px rgba(35, 95, 45, 0.14), 0 6px 22px rgba(16, 20, 13, 0.055), 0 0 0 1px rgba(35, 95, 45, 0.05) inset, inset 0 1px 0 rgba(255, 255, 255, 0.94);
+      --card-premium-title: #142015;
+      --card-premium-text: rgba(73, 87, 66, 0.88);
+      --card-premium-accent: #236d32;
       --card-alpha: 1;
       --card-y: 0px;
       --global-progress: 0;
@@ -1059,8 +1059,8 @@
       background: var(--card-premium-bg);
       border-color: var(--card-premium-border);
       box-shadow: var(--card-premium-shadow);
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
       color: var(--card-premium-title);
       transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease, filter 0.28s ease;
     }
@@ -1086,9 +1086,9 @@
       inset: 0;
       pointer-events: none;
       background:
-        radial-gradient(circle at 14% 0%, rgba(246, 185, 0, 0.18), transparent 12rem),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.10), transparent 38%);
-      opacity: 0.62;
+        radial-gradient(circle at 14% 0%, rgba(185, 255, 54, 0.12), transparent 11rem),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.44), transparent 42%);
+      opacity: 0.58;
     }
 
     .stat-card > *,
@@ -1106,7 +1106,7 @@
     .channel-card h3,
     .contact-row strong {
       color: var(--card-premium-title);
-      text-shadow: 0 1px 14px rgba(0, 0, 0, 0.18);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.46);
     }
 
     .stat-card span,
@@ -1121,21 +1121,21 @@
     .contact-row span,
     .signature {
       color: var(--card-premium-accent);
-      text-shadow: none;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.34);
     }
 
     .contact-row {
-      border-bottom-color: rgba(218, 180, 90, 0.24);
+      border-bottom-color: rgba(49, 94, 52, 0.16);
     }
 
     .info-card .card-icon,
     .channel-card .card-icon {
       color: var(--card-premium-accent);
-      background: rgba(246, 185, 0, 0.11);
-      border-color: rgba(246, 185, 0, 0.34);
-      box-shadow: 0 10px 24px rgba(3, 14, 8, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.13);
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      background: rgba(255, 255, 255, 0.72);
+      border-color: rgba(49, 94, 52, 0.20);
+      box-shadow: 0 8px 18px rgba(35, 95, 45, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
     }
 
     .stat-card:hover,
@@ -1145,26 +1145,26 @@
     .commercial-callout:hover,
     .contact-panel:hover {
       background: var(--card-premium-hover-bg);
-      border-color: rgba(246, 185, 0, 0.58);
+      border-color: rgba(49, 94, 52, 0.30);
       box-shadow: var(--card-premium-shadow-hover);
     }
 
     .empresa-stat-card:hover {
-      transform: translate3d(var(--empresa-stat-x, 0px), calc(var(--empresa-stat-y, 0px) - 8px), 0) scale(1.014);
+      transform: translate3d(var(--empresa-stat-x, 0px), calc(var(--empresa-stat-y, 0px) - 5px), 0) scale(1.006);
     }
 
     .info-card:hover,
     .channel-card:hover {
-      transform: translate3d(var(--product-card-x, 0px), calc(var(--card-y, 0px) + var(--product-card-y, 0px) - 8px), 0) scale(var(--product-card-scale, 1));
-      filter: saturate(1.06);
+      transform: translate3d(var(--product-card-x, 0px), calc(var(--card-y, 0px) + var(--product-card-y, 0px) - 5px), 0) scale(var(--product-card-scale, 1));
+      filter: saturate(1.025);
     }
 
     .story-card:hover {
-      transform: translate3d(0, -6px, 0);
+      transform: translate3d(0, -5px, 0);
     }
 
     .empresa-story:hover {
-      transform: translate3d(var(--empresa-story-x, 0px), -6px, 0) scale(var(--empresa-story-scale, 1));
+      transform: translate3d(var(--empresa-story-x, 0px), -5px, 0) scale(var(--empresa-story-scale, 1));
     }
 
     .commercial-callout:hover,
@@ -1339,9 +1339,9 @@
       .contact-panel {
         background: var(--card-premium-bg);
         border-color: var(--card-premium-border);
-        box-shadow: 0 18px 42px rgba(5, 18, 10, 0.24), 0 0 0 1px rgba(255, 255, 255, 0.07) inset;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+        box-shadow: 0 15px 34px rgba(35, 95, 45, 0.095), 0 2px 12px rgba(16, 20, 13, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
       }
 
       .info-card:hover,
@@ -1434,9 +1434,9 @@
       .story-card,
       .contact-panel,
       .commercial-callout {
-        background: linear-gradient(145deg, #173820, #081b12 58%, #164a20);
-        border-color: rgba(218, 180, 90, 0.42);
-        box-shadow: 0 22px 54px rgba(5, 18, 10, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.11);
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.985), rgba(247, 252, 244, 0.97) 58%, rgba(239, 249, 233, 0.955));
+        border-color: rgba(49, 94, 52, 0.22);
+        box-shadow: 0 18px 44px rgba(35, 95, 45, 0.105), 0 3px 16px rgba(16, 20, 13, 0.045), inset 0 1px 0 rgba(255, 255, 255, 0.88);
       }
     }
 
