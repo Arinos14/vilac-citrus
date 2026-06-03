@@ -32,6 +32,9 @@
       --glass-border: rgba(35, 95, 45, 0.10);
       --glass-border-green: rgba(35, 95, 45, 0.14);
       --glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+      --card-premium-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.985), rgba(244, 252, 238, 0.965));
+      --card-premium-border: rgba(20, 85, 29, 0.22);
+      --card-premium-shadow: 0 18px 46px rgba(20, 85, 29, 0.105), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
       --card-alpha: 1;
       --card-y: 0px;
       --global-progress: 0;
@@ -260,6 +263,7 @@
       transform-origin: center;
       transition: none;
       backface-visibility: hidden;
+      contain: layout paint style;
     }
 
     .video-shell,
@@ -290,8 +294,8 @@
       object-fit: cover;
       object-position: 50% 50%;
       transform: translate3d(0, 0, 0) scale(1.001);
-      filter: saturate(1.16) contrast(1.14) brightness(0.99);
-      -webkit-filter: saturate(1.16) contrast(1.14) brightness(0.99);
+      filter: none;
+      -webkit-filter: none;
       image-rendering: auto;
     }
 
@@ -311,6 +315,16 @@
     }
 
     .video-loader.is-hidden { opacity: 0; visibility: hidden; }
+
+    .video-stage.is-fallback video {
+      opacity: 0;
+    }
+
+    .video-stage.is-fallback .video-shell {
+      background:
+        radial-gradient(circle at 50% 42%, rgba(17, 154, 61, 0.24), transparent 22rem),
+        linear-gradient(135deg, rgba(247, 255, 240, 0.96), rgba(232, 248, 220, 0.92));
+    }
 
     .hero-content {
       width: 100%;
@@ -734,6 +748,27 @@
       will-change: transform, opacity;
     }
 
+    .produto-kicker,
+    .produto-title,
+    .produto-lead {
+      will-change: transform, opacity;
+    }
+
+    .produto-kicker {
+      opacity: var(--produto-kicker-alpha, 0);
+      transform: translate3d(0, var(--produto-kicker-y, -10px), 0);
+    }
+
+    .produto-title {
+      opacity: var(--produto-title-alpha, 0);
+      transform: translate3d(var(--produto-title-x, 0px), var(--produto-title-y, -24px), 0) scale(var(--produto-title-scale, 0.982));
+    }
+
+    .produto-lead {
+      opacity: var(--produto-lead-alpha, 0);
+      transform: translate3d(var(--produto-lead-x, 0px), var(--produto-lead-y, -18px), 0) scale(var(--produto-lead-scale, 0.986));
+    }
+
     .empresa-kicker {
       opacity: var(--empresa-kicker-alpha, 0);
       transform: translate3d(0, var(--empresa-kicker-y, -10px), 0);
@@ -849,17 +884,26 @@
     .info-card {
       min-height: 13rem;
       padding: 1.35rem;
-      opacity: var(--product-card-alpha, var(--card-alpha, 1));
-      transform: translate3d(0, calc(var(--card-y, 0px) + var(--product-card-y, 0px)), 0) scale(var(--product-card-scale, 1));
+      opacity: var(--product-card-alpha, 0);
+      transform: translate3d(var(--product-card-x, 0px), calc(var(--card-y, 0px) + var(--product-card-y, 30px)), 0) scale(var(--product-card-scale, 0.976));
       transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease, filter 0.28s ease;
+    }
+
+    .info-card,
+    .channel-card {
+      background: var(--card-premium-bg);
+      border-color: var(--card-premium-border);
+      box-shadow: var(--card-premium-shadow);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
     }
 
     .info-card:hover,
     .channel-card:hover {
-      transform: translate3d(0, calc(var(--card-y, 0px) + var(--product-card-y, 0px) - 9px), 0) scale(var(--product-card-scale, 1));
-      border-color: rgba(35, 95, 45, 0.22);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(241, 252, 236, 0.97));
-      box-shadow: 0 22px 56px rgba(57, 108, 20, 0.14);
+      transform: translate3d(var(--product-card-x, 0px), calc(var(--card-y, 0px) + var(--product-card-y, 0px) - 9px), 0) scale(var(--product-card-scale, 1));
+      border-color: rgba(17, 154, 61, 0.34);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(238, 251, 232, 0.985));
+      box-shadow: 0 26px 64px rgba(20, 85, 29, 0.16), 0 0 0 1px rgba(185, 255, 54, 0.14) inset;
       filter: saturate(1.04);
     }
 
@@ -1165,6 +1209,20 @@
         -webkit-backdrop-filter: blur(2px);
       }
 
+      .info-card,
+      .channel-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(244, 252, 238, 0.975));
+        border-color: rgba(20, 85, 29, 0.20);
+        box-shadow: 0 14px 34px rgba(20, 85, 29, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(1px);
+        -webkit-backdrop-filter: blur(1px);
+      }
+
+      .info-card:hover,
+      .channel-card:hover {
+        transform: translate3d(var(--product-card-x, 0px), calc(var(--card-y, 0px) + var(--product-card-y, 0px)), 0) scale(var(--product-card-scale, 1));
+      }
+
       .hero-content {
         min-height: calc(100svh - 7.8rem);
         grid-template-columns: 1fr;
@@ -1304,9 +1362,11 @@
           <video
             id="heroVideo"
             src="video2.mp4"
+            autoplay
+            loop
             muted
             playsinline
-            preload="auto"
+            preload="metadata"
             disablepictureinpicture
             disableremoteplayback
             aria-label="Vídeo de Limão Tahiti e caixote de madeira"
@@ -1372,9 +1432,9 @@
 
     <section class="section" id="produtos">
       <div class="section-inner reveal">
-        <span class="section-kicker"><span class="ping" aria-hidden="true"></span>Produtos</span>
-        <h2 class="section-title">Limão Tahiti selecionado para operação comercial.</h2>
-        <p class="section-lead">Produto fresco, padronizado e com aparência comercial para supermercados, atacados, distribuidores, restaurantes, hotéis e compradores profissionais.</p>
+        <span class="section-kicker produto-kicker"><span class="ping" aria-hidden="true"></span>Produtos</span>
+        <h2 class="section-title produto-title">Limão Tahiti selecionado para operação comercial.</h2>
+        <p class="section-lead produto-lead">Produto fresco, padronizado e com aparência comercial para supermercados, atacados, distribuidores, restaurantes, hotéis e compradores profissionais.</p>
         <div class="products-grid">
           <article class="info-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16.5 12 12l8 4.5"></path><path d="M4 7.5 12 3l8 4.5-8 4.5-8-4.5Z"></path><path d="M4 12l8 4.5 8-4.5"></path></svg></div><h3>Padrão comercial</h3><p>Calibre, casca, cor e firmeza avaliados para melhor apresentação e giro.</p></article>
           <article class="info-card"><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 19 7v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V7l7-4Z"></path><path d="m9.5 12 1.8 1.8 3.7-3.8"></path></svg></div><h3>Seleção por qualidade</h3><p>Triagem visual e cuidado no lote para reduzir variação e aumentar confiança.</p></article>
@@ -1446,6 +1506,7 @@
       const nav = document.getElementById("mainNav");
       const video = document.getElementById("heroVideo");
       const loader = document.getElementById("videoLoader");
+      const videoStage = document.querySelector(".video-stage");
       const progressRing = document.getElementById("progressRing");
       const progressText = document.getElementById("progressText");
       const copy = document.querySelector('[data-parallax="copy"]');
@@ -1458,6 +1519,10 @@
       const empresaStats = document.querySelector(".empresa-stats");
       const empresaStory = document.querySelector(".empresa-story");
       const empresaStatCards = Array.from(document.querySelectorAll(".empresa-stat-card"));
+      const productSection = document.getElementById("produtos");
+      const productKicker = document.querySelector(".produto-kicker");
+      const productTitle = document.querySelector(".produto-title");
+      const productLead = document.querySelector(".produto-lead");
       const productCards = Array.from(document.querySelectorAll("#produtos .info-card"));
       const countUpElements = Array.from(document.querySelectorAll("[data-countup]"));
       const motionBlocks = [
@@ -1481,12 +1546,14 @@
         }
       };
       const seekProxy = { time: 0, target: 0, lastSeekAt: 0 };
+      const USE_SCROLL_SCRUB_VIDEO = false;
       const VIDEO_START_PROGRESS = 0.04;
       const VIDEO_SCROLL_CAP_PROGRESS = 0.985;
       const VIDEO_END_TRIM_SEC = 3.2;
       const rootStyle = document.documentElement.style;
       let targetTime = 0;
       let hasMetadata = false;
+      let videoFailed = false;
       let motionStarted = false;
       let enhancementsStarted = false;
       let currentProgress = 0;
@@ -1595,6 +1662,7 @@
       const scrubQuantize = (t) => Math.round(t * SCRUB_FPS) / SCRUB_FPS;
 
       const syncVideoFromScroll = () => {
+        if (!USE_SCROLL_SCRUB_VIDEO) return;
         if (!hasMetadata || prefersReducedMotion || video.readyState < 1) return;
         const cap = getScrubTimeCap();
         const vct = video.currentTime || 0;
@@ -1627,6 +1695,7 @@
       };
 
       const requestScrub = (progress) => {
+        if (!USE_SCROLL_SCRUB_VIDEO) return;
         if (!hasMetadata || !Number.isFinite(video.duration) || video.duration <= 0) return;
         const scrubSpan = getScrubSpan();
         const cap = getScrubTimeCap();
@@ -1665,6 +1734,16 @@
         }
 
         return progress;
+      };
+
+      const getSectionScrollProgress = (section) => {
+        if (!section) return 1;
+        const rect = section.getBoundingClientRect();
+        const viewport = window.innerHeight || document.documentElement.clientHeight;
+        const isMobile = window.matchMedia("(max-width: 760px)").matches;
+        const start = viewport * 0.94;
+        const end = viewport * (isMobile ? 0.34 : 0.26);
+        return clamp((start - rect.top) / Math.max(start - end, 1));
       };
 
       const formatCountValue = (element, value) => {
@@ -1765,14 +1844,42 @@
           card.style.setProperty("--empresa-stat-scale", `${(0.976 + easedPresence * 0.024).toFixed(4)}`);
         });
 
+        const productProgress = getSectionScrollProgress(productSection);
+        const productKickerProgress = clamp(productProgress / 0.28);
+        const productTitleProgress = clamp((productProgress - 0.06) / 0.50);
+        const productLeadProgress = clamp((productProgress - 0.10) / 0.52);
+
+        if (productKicker) {
+          rootStyle.setProperty("--produto-kicker-alpha", productKickerProgress.toFixed(4));
+          rootStyle.setProperty("--produto-kicker-y", `${((1 - productKickerProgress) * (isMobile ? -6 : -10)).toFixed(2)}px`);
+        }
+
+        if (productTitle) {
+          rootStyle.setProperty("--produto-title-alpha", productTitleProgress.toFixed(4));
+          rootStyle.setProperty("--produto-title-x", "0px");
+          rootStyle.setProperty("--produto-title-y", `${((1 - productTitleProgress) * (isMobile ? -16 : -28)).toFixed(2)}px`);
+          rootStyle.setProperty("--produto-title-scale", `${(0.982 + productTitleProgress * 0.018).toFixed(4)}`);
+        }
+
+        if (productLead) {
+          rootStyle.setProperty("--produto-lead-alpha", productLeadProgress.toFixed(4));
+          rootStyle.setProperty("--produto-lead-x", "0px");
+          rootStyle.setProperty("--produto-lead-y", `${((1 - productLeadProgress) * (isMobile ? -12 : -20)).toFixed(2)}px`);
+          rootStyle.setProperty("--produto-lead-scale", `${(0.986 + productLeadProgress * 0.014).toFixed(4)}`);
+        }
+
         productCards.forEach((card, index) => {
-          const presence = getBlockPresence(card);
-          const rowOffset = Math.floor(index / 3) * (isMobile ? 0.05 : 0.07);
-          const colOffset = (index % 3) * 0.03;
-          const stagedPresence = clamp((presence - rowOffset - colOffset) / Math.max(1 - rowOffset - colOffset, 0.2));
-          card.style.setProperty("--product-card-alpha", (0.84 + stagedPresence * 0.16).toFixed(4));
-          card.style.setProperty("--product-card-y", `${((1 - stagedPresence) * (isMobile ? 18 : 30)).toFixed(2)}px`);
-          card.style.setProperty("--product-card-scale", `${(0.976 + stagedPresence * 0.024).toFixed(4)}`);
+          const stagger = index * (isMobile ? 0.04 : 0.055);
+          const base = clamp((productProgress - 0.22 - stagger) / 0.54);
+          const easedPresence = base * base * (3 - 2 * base);
+          const column = index % 3;
+          const rowLift = Math.floor(index / 3) * (isMobile ? 2 : 4);
+          const desktopX = column === 0 ? -34 : column === 2 ? 38 : 0;
+          const desktopY = column === 1 ? 36 + rowLift : 18 + rowLift;
+          card.style.setProperty("--product-card-alpha", easedPresence.toFixed(4));
+          card.style.setProperty("--product-card-x", `${((1 - easedPresence) * (isMobile ? 0 : desktopX)).toFixed(2)}px`);
+          card.style.setProperty("--product-card-y", `${((1 - easedPresence) * (isMobile ? 22 : desktopY)).toFixed(2)}px`);
+          card.style.setProperty("--product-card-scale", `${(0.974 + easedPresence * 0.026).toFixed(4)}`);
         });
 
         if (!empresaCountStarted && empresaProgress >= 0.62) {
@@ -1876,6 +1983,16 @@
           rootStyle.setProperty("--empresa-story-alpha", "1");
           rootStyle.setProperty("--empresa-story-x", "0px");
           rootStyle.setProperty("--empresa-story-scale", "1");
+          rootStyle.setProperty("--produto-kicker-alpha", "1");
+          rootStyle.setProperty("--produto-kicker-y", "0px");
+          rootStyle.setProperty("--produto-title-alpha", "1");
+          rootStyle.setProperty("--produto-title-x", "0px");
+          rootStyle.setProperty("--produto-title-y", "0px");
+          rootStyle.setProperty("--produto-title-scale", "1");
+          rootStyle.setProperty("--produto-lead-alpha", "1");
+          rootStyle.setProperty("--produto-lead-x", "0px");
+          rootStyle.setProperty("--produto-lead-y", "0px");
+          rootStyle.setProperty("--produto-lead-scale", "1");
           empresaStatCards.forEach((card) => {
             card.style.setProperty("--empresa-stat-alpha", "1");
             card.style.setProperty("--empresa-stat-x", "0px");
@@ -1884,6 +2001,7 @@
           });
           productCards.forEach((card) => {
             card.style.setProperty("--product-card-alpha", "1");
+            card.style.setProperty("--product-card-x", "0px");
             card.style.setProperty("--product-card-y", "0px");
             card.style.setProperty("--product-card-scale", "1");
           });
@@ -1973,16 +2091,27 @@
 
       const onMetadata = () => {
         hasMetadata = true;
-        video.pause();
-        const scrubSpan = getScrubSpan();
-        const cap = getScrubTimeCap();
-        const initialTime = scrubQuantize(Math.min(scrubSpan * VIDEO_START_PROGRESS, cap));
-        seekProxy.time = initialTime;
-        targetTime = initialTime;
-        try {
-          video.currentTime = initialTime;
-        } catch (e) {
-          /* ignore */
+        if (USE_SCROLL_SCRUB_VIDEO || prefersReducedMotion) {
+          video.pause();
+          const scrubSpan = getScrubSpan();
+          const cap = getScrubTimeCap();
+          const initialTime = scrubQuantize(Math.min(scrubSpan * VIDEO_START_PROGRESS, cap));
+          seekProxy.time = initialTime;
+          targetTime = initialTime;
+          try {
+            video.currentTime = initialTime;
+          } catch (e) {
+            /* ignore */
+          }
+        } else {
+          video.playbackRate = window.matchMedia("(max-width: 760px)").matches ? 0.92 : 1;
+          const playAttempt = video.play();
+          if (playAttempt && typeof playAttempt.catch === "function") {
+            playAttempt.catch(() => {
+              videoStage?.classList.add("is-fallback");
+              loader.textContent = "Prévia visual";
+            });
+          }
         }
         hideLoader();
         initCountUps();
@@ -1992,8 +2121,17 @@
 
       video.addEventListener("loadedmetadata", onMetadata, { once: true });
       video.addEventListener("canplay", hideLoader, { once: true });
+      video.addEventListener("error", () => {
+        videoFailed = true;
+        videoStage?.classList.add("is-fallback");
+        loader.textContent = "Prévia visual";
+        hideLoader();
+        initCountUps();
+        initMotion();
+        syncGlobalMotion();
+      }, { once: true });
       video.addEventListener("ended", () => {
-        if (!hasMetadata || prefersReducedMotion) return;
+        if (!hasMetadata || prefersReducedMotion || !USE_SCROLL_SCRUB_VIDEO) return;
         try {
           video.pause();
           const cap = getScrubTimeCap();
@@ -2005,9 +2143,14 @@
       });
 
       window.setTimeout(() => {
-        if (!hasMetadata) {
+        if (!hasMetadata && !videoFailed) {
+          videoFailed = true;
+          videoStage?.classList.add("is-fallback");
           loader.textContent = "Prévia visual";
+          hideLoader();
+          initCountUps();
           initMotion();
+          syncGlobalMotion();
         }
       }, 2600);
 
